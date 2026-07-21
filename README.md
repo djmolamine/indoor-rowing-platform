@@ -2,7 +2,7 @@
 
 A universal, mobile-first indoor rowing platform that normalizes workouts from many machines and import methods into one canonical model.
 
-This repository currently contains the MVP architecture foundation only. No UI has been implemented.
+The repository includes the first runnable product shell: a responsive landing page, dashboard, workouts, leaderboard, challenges, and profile views. All application data is currently mocked; Supabase is intentionally not connected yet.
 
 ## Product principles
 
@@ -12,19 +12,20 @@ This repository currently contains the MVP architecture foundation only. No UI h
 - Secure by default: Supabase Auth and row-level security protect user data.
 - Replaceable adapters: source-specific logic lives behind importer contracts, not in core tables.
 
-## Intended stack
+## Stack
 
-- Next.js (App Router) and TypeScript
-- Tailwind CSS and shadcn/ui
-- Supabase Auth, PostgreSQL, Storage, and Edge Functions where appropriate
-- Vercel
+- Next.js 16 with the App Router
+- React 19 and TypeScript
+- Tailwind CSS 4
+- Lucide icons
+- Supabase and Vercel are planned but not connected in this version
 
 ## Repository layout
 
 ```text
 src/
-  app/                   # Next.js routes and layouts (no UI yet)
-  components/            # Future shared and feature components
+  app/                   # Next.js routes, layouts, and global styles
+  components/            # Shared navigation and presentation components
   features/              # Vertical product features
   lib/                    # Framework integrations and shared utilities
   server/                 # Server-only application code
@@ -40,23 +41,42 @@ supabase/
 
 Feature and server directories contain `.gitkeep` placeholders until implementation begins.
 
-## Getting started (next implementation phase)
+## Run locally
 
-1. Scaffold Next.js with TypeScript, Tailwind, ESLint, and the App Router in this repository.
-2. Initialize shadcn/ui without generating product screens.
-3. Create a Supabase project and configure local development.
-4. Copy environment variables into `.env.local`:
+Requirements: Node.js 20.9 or newer and npm.
+
+From the repository root, run exactly:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
+npm install
+npm run dev
 ```
 
-The service-role key must only be available to trusted server processes and must never use the `NEXT_PUBLIC_` prefix.
+Then open [http://localhost:3000](http://localhost:3000).
 
-5. Apply `supabase/migrations/0001_initial_schema.sql` through the Supabase CLI.
-6. Generate database types into `src/types/database.generated.ts` rather than maintaining them by hand.
+To verify and run the production build locally:
+
+```bash
+npm run build
+npm run start
+```
+
+To run the lint checks:
+
+```bash
+npm run lint
+```
+
+No environment variables are required for this mock-data version.
+
+## Available routes
+
+- `/` — public landing page
+- `/dashboard` — authenticated-product shell preview
+- `/workouts` — mock workout history and import actions
+- `/leaderboard` — mock monthly community ranking
+- `/challenges` — mock challenge progress
+- `/profile` — mock user preferences and account summary
 
 ## Architectural decisions
 
@@ -70,4 +90,4 @@ See [Technical architecture](docs/architecture.md), [Authentication](docs/authen
 
 ## Status
 
-Architecture foundation complete. The next milestone is project scaffolding and authentication plumbing, followed by manual workout entry as the first end-to-end source adapter.
+First runnable frontend complete. The next milestone is Supabase client setup and authentication plumbing, followed by manual workout entry through the canonical workout model.
