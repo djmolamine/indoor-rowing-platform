@@ -86,7 +86,7 @@ No environment variables are required for this mock-data version.
 - `import_jobs` models asynchronous ingestion and retry state.
 - Units are stored explicitly where ambiguity is possible; normalized rowing metrics use SI-friendly conventions.
 
-See [Technical architecture](docs/architecture.md), [Authentication](docs/authentication.md), and [Navigation](docs/navigation.md).
+See [Product requirements](docs/product-requirements.md), [Technical architecture](docs/architecture.md), [Authentication](docs/authentication.md), and [Navigation](docs/navigation.md).
 
 ## Status
 

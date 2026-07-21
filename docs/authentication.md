@@ -1,11 +1,23 @@
 # Authentication and authorization flow
 
+| Document field | Value |
+|---|---|
+| **Title** | Authentication and Authorization Flow |
+| **Version** | 1.0 |
+| **Status** | Approved |
+| **Owner** | Founders |
+| **Last Reviewed** | 2026-07-21 |
+| **Related Documents** | [Athlete Passport](09_ATHLETE_PASSPORT.md), [Database Foundation](06_DATABASE.md), [Notifications](11_NOTIFICATIONS.md), [Technical Architecture](architecture.md) |
+
 ## Goals
 
 - Supabase Auth is the identity provider.
 - The web app supports email magic link or one-time password first; OAuth providers can be added later.
 - Sessions work correctly across Server Components, Server Actions, Route Handlers, and the browser.
 - Database row-level security remains the final authorization boundary.
+- Authentication remains separate from the Athlete Passport, provider connections, organization roles, and event eligibility.
+
+Supabase is not connected in the current mock application. This document defines the approved implementation flow.
 
 ## Sign-up and sign-in
 
@@ -14,9 +26,12 @@
 3. Supabase redirects to `/auth/callback` with an authorization code.
 4. A Route Handler exchanges the code for a session using the server Supabase client.
 5. Auth cookies are written securely, and the user is redirected to `/workouts`.
-6. The database trigger creates `public.profiles` on first identity creation.
+6. The database trigger creates the minimum application profile on first identity creation.
+7. The onboarding flow collects only the additional required fields defined by the Athlete Passport and records acceptance of the current terms and privacy notice with version, locale, and timestamp.
 
 Do not put privileged profile initialization in browser code.
+
+Optional Athlete Passport fields, notification preferences, provider permissions, and event-specific consents are collected later through value-led flows. They must not be bundled into account creation.
 
 ## Request/session flow
 
@@ -41,12 +56,15 @@ Authentication answers who the user is. Authorization is enforced in two layers:
 
 Catalog tables such as `source_providers` and `machine_models` may be publicly readable. They are not user-writable.
 
+Organization, coach, guardian, organizer, federation, and future World Rowing access uses explicit scoped roles with effective dates, expiry, and revocation. Shared credentials are prohibited. Public profile views use purpose-built projections that respect Athlete Passport visibility rather than exposing profile tables directly.
+
 ## Account lifecycle
 
 - Profile edits update `public.profiles`, not `auth.users` directly.
 - Email changes use Supabase Auth verification.
-- Account deletion is a deliberate server-side use case requiring recent authentication. Deleting the auth identity cascades user-owned records according to the schema.
+- Account deletion is a deliberate server-side use case requiring recent authentication. The workflow deletes or anonymizes data according to category-specific policy before removing the auth identity.
 - Export and deletion workflows should include uploaded artifacts in Storage.
+- Official competition results or integrity records may require disclosed limited retention; this exception must not preserve unrelated private Athlete Passport data.
 
 ## Security checklist
 

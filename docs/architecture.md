@@ -1,10 +1,29 @@
 # Technical architecture
 
+| Document field | Value |
+|---|---|
+| **Title** | Technical Architecture |
+| **Version** | 1.0 |
+| **Status** | Approved |
+| **Owner** | Founders |
+| **Last Reviewed** | 2026-07-21 |
+| **Related Documents** | [Database Foundation](06_DATABASE.md), [Machine Providers](07_MACHINE_PROVIDERS.md), [Athlete Passport](09_ATHLETE_PASSPORT.md), [Authentication](authentication.md) |
+
 ## 1. Scope
 
-The MVP provides identity, workout ingestion, normalization, history, workout detail, and source management. It is a universal rowing data platform, not an emulation of any single machine or logbook.
+The architecture supports a universal indoor-rowing platform centered on athlete identity, canonical workout ingestion, history, progress, events, community, and consented communications. It is not an emulation of any single machine or logbook.
 
-Out of scope for the architecture foundation: UI implementation, live racing, social feeds, coaching plans, billing, and vendor-specific adapter code.
+The current implementation baseline does not yet connect Supabase or external providers. Live racing, prescriptive coaching, billing, and full organizer operations remain later roadmap phases. This document defines the target boundaries that current and future implementation must preserve.
+
+### Architectural invariants
+
+- The architecture is provider-neutral; provider-specific behavior remains behind adapters.
+- Every source maps into the canonical workout model while preserving provenance.
+- Machine classes and verification tiers are explicit and independent.
+- The Athlete Passport is separate from authentication, provider accounts, and event registration.
+- River Expeditions and challenges reference eligible canonical workouts rather than duplicating workout truth.
+- Consented communications are enforced by purpose, sender, category, and channel.
+- The platform is World Rowing compatible, never dependent.
 
 ## 2. System context
 
@@ -36,7 +55,7 @@ Use cases coordinate authorization, source adapters, normalization, and persiste
 
 ### Domain
 
-Vendor-neutral workout types, validation rules, metric derivation, and provenance rules. Domain code must not import Supabase, Next.js, or vendor SDKs.
+Provider-neutral workout types, validation rules, metric derivation, provenance, machine classes, verification tiers, Athlete Passport claims, competition rules, River Expeditions, and consent rules. Domain code must not import Supabase, Next.js, or provider SDKs.
 
 ### Infrastructure
 
@@ -188,15 +207,15 @@ Each feature should expose a small public API. Vendor packages belong under `ser
 - Preview deployments use a non-production Supabase project or branching strategy.
 - Backups and point-in-time recovery should be enabled before production use.
 
-## 11. Delivery sequence
+## 11. Implementation sequence
 
-1. Scaffold Next.js and typed environment validation.
-2. Configure Supabase clients, middleware/session refresh, and generated DB types.
-3. Apply schema and verify RLS with automated tests.
-4. Implement manual entry through the same normalization/application boundary used by imports.
-5. Add history and detail reads.
-6. Add photo upload/OCR draft flow.
-7. Add the first external provider adapter based on product demand, without changing the canonical schema.
+1. Configure Supabase clients, request-scoped authentication, and generated database types.
+2. Reconcile and apply the schema with automated RLS and authorization tests.
+3. Implement manual entry through the same canonical application boundary used by adapters.
+4. Add history, detail, provenance, and personal-record reads.
+5. Add photo/OCR draft confirmation.
+6. Add the provider adapter framework and first external integration based on demand and access.
+7. Add Athlete Passport, consent, event discovery, and community domains in the order defined by [13_ROADMAP.md](13_ROADMAP.md).
 
 ## 12. Architecture decisions to record next
 
