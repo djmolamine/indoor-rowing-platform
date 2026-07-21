@@ -1,0 +1,1 @@
+-- Add local-only seed data here. Provider catalog rows are created by the initial migration.
