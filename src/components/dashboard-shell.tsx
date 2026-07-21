@@ -10,9 +10,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <div className="px-2"><Brand /></div>
         <div className="mt-10"><AppNav /></div>
         <div className="mt-auto rounded-2xl bg-[#0d2b24] p-4 text-white">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8eb4a8]">This month</p>
-          <p className="mt-2 text-2xl font-black">62.4 km</p>
-          <p className="mt-1 text-xs text-[#a9c1ba]">8 sessions completed</p>
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8eb4a8]">Danube expedition</p>
+          <p className="mt-2 text-2xl font-black">428.6 km</p>
+          <p className="mt-1 text-xs text-[#a9c1ba]">Next milestone: Vienna</p>
         </div>
       </aside>
 
@@ -26,7 +26,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 <Bell size={18} aria-hidden="true" />
               </button>
               <Link href="/workouts" className="hidden min-h-10 items-center gap-2 rounded-full bg-[#ff6b35] px-4 text-sm font-black text-white sm:inline-flex">
-                <Plus size={17} aria-hidden="true" /> Add workout
+                <Plus size={17} aria-hidden="true" /> Log workout
               </Link>
               <div className="grid size-10 place-items-center rounded-full bg-[#d4e8e1] text-sm font-black text-[#0d2b24]" aria-label="User profile">MD</div>
             </div>

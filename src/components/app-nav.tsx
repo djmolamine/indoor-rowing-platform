@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Award, Home, Medal, Target, UserRound } from "lucide-react";
+import { CalendarDays, Home, IdCard, Medal, Settings, Target, UsersRound } from "lucide-react";
 
 const items = [
-  { label: "Home", href: "/dashboard", icon: Home },
+  { label: "Lobby", href: "/dashboard", icon: Home },
   { label: "Workouts", href: "/workouts", icon: Target },
-  { label: "Leaderboard", href: "/leaderboard", icon: Medal },
-  { label: "Challenges", href: "/challenges", icon: Award },
-  { label: "Profile", href: "/profile", icon: UserRound },
+  { label: "Passport", href: "/profile", icon: IdCard },
+  { label: "Rankings", href: "/leaderboard", icon: Medal },
+  { label: "Community", href: "/dashboard#community", icon: UsersRound },
+  { label: "Events", href: "/dashboard#event", icon: CalendarDays },
+  { label: "Settings", href: "/profile#settings", icon: Settings },
 ];
 
 export function AppNav() {
@@ -20,15 +22,15 @@ export function AppNav() {
       className="fixed inset-x-0 bottom-0 z-50 border-t border-[#dfe5e1] bg-white/95 px-2 pb-[max(.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur md:static md:border-0 md:bg-transparent md:p-0"
       aria-label="Primary navigation"
     >
-      <div className="mx-auto flex max-w-lg items-center justify-around md:max-w-none md:flex-col md:items-stretch md:gap-1">
+      <div className="mx-auto flex max-w-full items-center gap-1 overflow-x-auto md:max-w-none md:flex-col md:items-stretch md:gap-1 md:overflow-visible">
         {items.map(({ label, href, icon: Icon }) => {
-          const active = pathname === href;
+          const active = pathname === href && !href.includes("#");
           return (
             <Link
               key={href}
               href={href}
               aria-current={active ? "page" : undefined}
-              className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-[10px] font-bold transition md:flex-none md:flex-row md:gap-3 md:px-3 md:py-3 md:text-sm ${
+              className={`flex min-w-[4.25rem] flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-[10px] font-bold transition md:min-w-0 md:flex-none md:flex-row md:gap-3 md:px-3 md:py-3 md:text-sm ${
                 active ? "bg-[#eef3f0] text-[#0d2b24]" : "text-[#718078] hover:bg-[#f5f7f4] hover:text-[#263a34]"
               }`}
             >
