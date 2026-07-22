@@ -33,6 +33,16 @@ Domain tables should use stable internal UUIDs. External identifiers are scoped 
 
 ## Athlete and identity model
 
+### Implemented foundation
+
+Migration `0005_authentication_database_foundation.sql` makes the account boundary explicit. `profiles.auth_user_id` is unique and references `auth.users`; the existing profile UUID remains stable so earlier foreign keys do not require destructive rewrites. One Profile owns one `athlete_passports` row and one `profile_visibility_settings` row. `user_roles` prepares scoped authorization, while only the non-editable athlete grant is currently used by the MVP.
+
+Canonical `countries` and country-dependent `cities` tables are distinct from manually entered locality fallback. Clubs and dated `club_memberships` remain separate from the temporary primary-club presentation. The complete ISO catalogue remains maintained source data and must be loaded before the later country foreign-key validation migration is enabled for an existing project.
+
+The workout ledger now includes canonical role, source, visibility, ranking eligibility, and soft deletion. `workout_sources`, `workout_splits`, existing `workout_intervals`, `results`, `personal_bests`, `expeditions`, `athlete_expeditions`, and `expedition_contributions` use explicit ownership and relationships. A result references a workout instead of copying its metrics.
+
+All athlete-owned additions have RLS. Athlete-created Results are constrained to provisional, tier-zero claims with no official position; organizer and federation mutation policies remain intentionally absent. Public views exclude email, authentication UUIDs, date of birth, private notes, device identifiers, internal evidence, and deleted records.
+
 ### Account
 
 Authentication identity, verified email, security state, account lifecycle, and accepted legal documents. Authentication credentials remain in Supabase Auth; application profile data remains in application tables.

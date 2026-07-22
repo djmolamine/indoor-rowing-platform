@@ -53,6 +53,7 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 | PD-020 | Maintain a curated machine provider and model catalogue | Accepted | 2026-07-22 |
 | PD-021 | Establish Events as a commercial platform pillar | Accepted | 2026-07-22 |
 | PD-022 | Link competitive results to authoritative workout detail | Accepted | 2026-07-22 |
+| PD-023 | Separate authenticated account, private Profile, and public Passport | Accepted | 2026-07-22 |
 
 ## PD-001: Universal machine-independent platform
 
@@ -259,7 +260,19 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Review trigger:** Selection of a live payment provider, first organizer commercial agreement, first paid registration, or launch in a jurisdiction requiring different marketplace, tax, refund, or safeguarding controls.
 - **Related:** [19_EVENTS_ARCHITECTURE.md](19_EVENTS_ARCHITECTURE.md), [06_DATABASE.md](06_DATABASE.md), [08_COMPETITIONS.md](08_COMPETITIONS.md), [18_ROADMAP.md](18_ROADMAP.md)
 
-## Decision template
+## PD-023: Authenticated account, private Profile, and public Passport
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Context:** Prototype identity was duplicated across browser state and hardcoded Lobby, Passport, Settings, and workout data, creating privacy and ownership ambiguity.
+- **Decision:** Supabase Auth is the credential authority. Exactly one private Profile is linked through unique `auth_user_id`; exactly one Athlete Passport and privacy-settings record are created idempotently. Athlete-owned writes derive ownership from the authenticated session and are protected by RLS. Public presentation uses restricted views, while roles use non-editable scoped grants. Manual workouts persist in the canonical ledger; controlled competitive seed data may remain temporarily, but it cannot define the signed-in athlete.
+- **Rationale:** One identity chain prevents private-data leakage, conflicting location, forged ownership, and provider-shaped application state.
+- **Consequences:** Authenticated routes require valid Supabase configuration and no longer expose a demo bypass. Environment setup and two-user RLS tests are release gates. Service-role credentials remain server-only and are unnecessary for normal athlete workflows.
+- **Alternatives:** Browser-only identity; using `auth.users` as a public profile; storing roles in editable profile fields; permissive RLS; production fake-athlete seeds.
+- **Evidence:** Authentication audit, existing migrations, Supabase SSR session model, Profile and Athlete Passport product boundaries.
+- **Review trigger:** First coach, club administrator, organizer, federation, or account-deletion workflow.
+- **Related:** [authentication.md](authentication.md), [architecture.md](architecture.md), [06_DATABASE.md](06_DATABASE.md), [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md)
 
 ## PD-022: Linked workout and result detail
 
@@ -274,6 +287,8 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Evidence:** Canonical workout, verification, ranking, Event, Athlete Passport, and Expedition architecture.
 - **Review trigger:** Production persistence, first live provider telemetry import, organizer correction tooling, or public result sharing.
 - **Related:** [06_DATABASE.md](06_DATABASE.md), [07_MACHINE_PROVIDERS.md](07_MACHINE_PROVIDERS.md), [08_COMPETITIONS.md](08_COMPETITIONS.md), [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md), [19_EVENTS_ARCHITECTURE.md](19_EVENTS_ARCHITECTURE.md)
+
+## Decision template
 
 Copy this structure for new records:
 

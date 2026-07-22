@@ -13,7 +13,7 @@
 
 The architecture supports a universal indoor-rowing platform centered on athlete identity, canonical workout ingestion, history, progress, events, community, and consented communications. It is not an emulation of any single machine or logbook.
 
-The current implementation baseline does not yet connect Supabase or external providers. Live racing, prescriptive coaching, billing, and full organizer operations remain later roadmap phases. This document defines the target boundaries that current and future implementation must preserve.
+The implementation now uses Supabase SSR authentication, request-scoped server clients, generated database contracts, repository-owned profile and workout access, and forward-only migrations with Row Level Security. A configured non-production Supabase project and applied migrations are required to run authenticated routes. External machine providers, live racing, billing, and full organizer operations remain later phases.
 
 ### Architectural invariants
 
@@ -154,6 +154,16 @@ Job processing is idempotent. State transitions are `queued -> processing -> com
 - The service-role key is restricted to server/worker environments.
 - Authorization is checked at both the application boundary and database policy layer.
 
+### Account, Profile, and Passport
+
+`auth.users` owns credentials and session identity. `profiles` is the private, one-per-user account-linked athlete record. `athlete_passports` is the athlete-facing presentation and claim container; `profile_visibility_settings` controls granular publication. A secure, idempotent `handle_new_user` trigger creates the Profile, Passport, private visibility defaults, and athlete role. Client code never supplies an ownership ID.
+
+Public surfaces query deliberately restricted projections (`public_athlete_passports`, `public_ranking_results`, and `public_club_summaries`) rather than private tables. Roles live in `user_roles` and cannot be granted by editing a profile.
+
+### Repository boundary
+
+Visual components do not create Supabase clients or issue direct ownership queries. Server-only repositories under `src/server/repositories` obtain the authenticated user, rely on RLS, and map generated database rows into UI/domain contracts. Browser clients are limited to session-aware interactions such as configured OAuth and password recovery.
+
 ## 8. Server/API strategy
 
 - Server Components: authenticated reads where streaming and caching behavior are explicit.
@@ -220,3 +230,12 @@ Each feature should expose a small public API. Vendor packages belong under `ser
 ## 12. Architecture decisions to record next
 
 Create ADRs when choosing the job runner, OCR provider, first external integration, token vault, and analytics/observability stack. These are deliberately deferred so the MVP foundation does not prematurely couple itself to a vendor.
+
+## 13. Prototype-data transition
+
+- **Replace now:** signed-in identity, location, settings, Passport presentation, and athlete-owned workout history come from Supabase through server repositories.
+- **Retain as reference catalogues:** ISO countries, machine-provider/model definitions, competition taxonomy, and the Expedition catalogue remain typed product reference data until migrated into production-safe seeds.
+- **Retain temporarily:** controlled ranking and Event fixtures may demonstrate taxonomy, but they must never become the signed-in athlete's identity or bypass record ownership.
+- **Remove from runtime ownership:** browser-session and hardcoded prototype athlete records are not authoritative. No production authentication user is seeded.
+
+This classification keeps visual prototypes usable while maintaining one credential-to-Profile-to-Passport identity chain.

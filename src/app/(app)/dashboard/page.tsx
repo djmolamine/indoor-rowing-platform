@@ -22,6 +22,9 @@ import { RowingMotif } from "@/components/lobby/rowing-motif";
 import { SectionLabel } from "@/components/lobby/section-label";
 import { TimeAwareGreeting } from "@/components/lobby/time-aware-greeting";
 import { lobbyData, type ReasonToRow } from "@/lib/lobby-data";
+import { requireCurrentAccount } from "@/server/repositories/profile-repository";
+import { getCountry } from "@/lib/location-data/countries";
+import { listCurrentAthleteWorkouts } from "@/server/repositories/workout-repository";
 
 function ProgressBar({ value, label, inverse = false }: { value: number; label: string; inverse?: boolean }) {
   return (
@@ -50,8 +53,14 @@ function ReasonCard({ reason }: { reason: ReasonToRow }) {
   );
 }
 
-export default function LobbyPage() {
-  const { athlete, today, expedition, event, progress, community } = lobbyData;
+export default async function LobbyPage() {
+  const [{profile,passport},workouts]=await Promise.all([requireCurrentAccount(),listCurrentAthleteWorkouts()]);
+  const country=getCountry(profile.country_code??"");const displayName=profile.display_name??"Athlete";
+  const lifetimeDistanceKm=workouts.reduce((total,workout)=>total+Number(workout.distance_meters??0),0)/1000;
+  const athlete={...lobbyData.athlete,firstName:displayName.split(" ")[0],fullName:displayName,countryCode:profile.country_code??"—",country:country?.name??"Country not set",trainingIdentity:profile.training_context?.replaceAll("_"," ")??"Independent athlete",passport:{...lobbyData.athlete.passport,status:passport.verification_status,completion:profile.onboarding_status==="completed"?70:30,readiness:profile.onboarding_status==="completed"?"Core profile ready":"Continue onboarding when useful",lifetimeDistanceKm,personalBestCount:0,completedExpeditions:0}};
+  const { today, expedition, event, progress: referenceProgress, community } = lobbyData;
+  const latest=workouts[0];
+  const progress={...referenceProgress,personalBest:{distance:"No eligible result",result:"—",improvement:"Log a verified effort",date:"—",verified:false},recentWorkout:latest?{title:latest.title??"Indoor row",distance:`${(Number(latest.distance_meters??0)/1000).toFixed(2)} km`,duration:latest.duration_ms?`${Math.round(latest.duration_ms/60000)} min`:"—",pace:latest.average_pace_ms_per_500m?`${(latest.average_pace_ms_per_500m/1000).toFixed(1)} sec /500 m`:"Pace not recorded",strokeRate:latest.average_spm?`${latest.average_spm} spm`:"Stroke rate not recorded",source:latest.source_method}:{title:"No workouts yet",distance:"—",duration:"—",pace:"Log your first row",strokeRate:"—",source:""},ranking:{position:0,fieldSize:0,category:"Not ranked",scope:"No eligible result",machineClass:"Verification required"},weeklyConsistency:{completedDays:0,targetDays:3,label:"Start your first week",strokeProfile:[0,0,0,0,0,0,0]},insight:"Your persisted workouts will shape this summary as your record grows."};
   const expeditionProgress = (expedition.completedKm / expedition.totalKm) * 100;
   const weeklyProgress = (progress.weeklyConsistency.completedDays / progress.weeklyConsistency.targetDays) * 100;
 
@@ -175,9 +184,9 @@ export default function LobbyPage() {
       <LobbyCard>
         <div className="flex items-end justify-between gap-4"><div><SectionLabel>Athlete progress</SectionLabel><h2 className="mt-2 text-2xl font-black">The form behind the meters.</h2></div><Link href="/workouts" className="hidden text-sm font-black text-[#d94d1c] sm:inline-flex">Workout history</Link></div>
         <div className="mt-6 grid gap-3 md:grid-cols-4">
-          <article className="rounded-2xl border border-[#e7ebe8] p-4"><Sparkles size={18} className="text-[#ff6b35]" aria-hidden="true" /><p className="mt-4 text-[10px] font-bold uppercase tracking-[0.12em] text-[#687871]">Latest personal best</p><h3 className="mt-2 text-2xl font-black tabular-nums">{progress.personalBest.result}</h3><p className="mt-1 text-sm font-bold">{progress.personalBest.distance} · {progress.personalBest.improvement}</p><p className="mt-2 flex items-center gap-1 text-xs text-[#16725e]"><ShieldCheck size={13} aria-hidden="true" /> Verified · {progress.personalBest.date}</p></article>
+          <article className="rounded-2xl border border-[#e7ebe8] p-4"><Sparkles size={18} className="text-[#ff6b35]" aria-hidden="true" /><p className="mt-4 text-[10px] font-bold uppercase tracking-[0.12em] text-[#687871]">Latest personal best</p><h3 className="mt-2 text-2xl font-black tabular-nums">{progress.personalBest.result}</h3><p className="mt-1 text-sm font-bold">{progress.personalBest.distance} · {progress.personalBest.improvement}</p><p className="mt-2 flex items-center gap-1 text-xs text-[#16725e]"><ShieldCheck size={13} aria-hidden="true" /> {progress.personalBest.verified?`Verified · ${progress.personalBest.date}`:"No verified result yet"}</p></article>
           <article className="rounded-2xl border border-[#e7ebe8] p-4"><CircleGauge size={18} className="text-[#16725e]" aria-hidden="true" /><p className="mt-4 text-[10px] font-bold uppercase tracking-[0.12em] text-[#687871]">Recent workout</p><h3 className="mt-2 font-black">{progress.recentWorkout.title}</h3><p className="mt-2 text-xl font-black tabular-nums">{progress.recentWorkout.distance}</p><p className="mt-2 text-xs text-[#687871]">{progress.recentWorkout.pace} · {progress.recentWorkout.strokeRate}</p></article>
-          <article className="rounded-2xl border border-[#e7ebe8] p-4"><Medal size={18} className="text-[#d39820]" aria-hidden="true" /><p className="mt-4 text-[10px] font-bold uppercase tracking-[0.12em] text-[#687871]">Ranking snapshot</p><h3 className="mt-2 text-2xl font-black tabular-nums">#{progress.ranking.position} <span className="text-sm text-[#687871]">of {progress.ranking.fieldSize}</span></h3><p className="mt-1 text-sm font-bold">{progress.ranking.scope}</p><p className="mt-2 text-xs text-[#687871]">{progress.ranking.machineClass}</p></article>
+          <article className="rounded-2xl border border-[#e7ebe8] p-4"><Medal size={18} className="text-[#d39820]" aria-hidden="true" /><p className="mt-4 text-[10px] font-bold uppercase tracking-[0.12em] text-[#687871]">Ranking snapshot</p><h3 className="mt-2 text-2xl font-black tabular-nums">{progress.ranking.position?`#${progress.ranking.position}`:"Not ranked"} {progress.ranking.fieldSize>0&&<span className="text-sm text-[#687871]">of {progress.ranking.fieldSize}</span>}</h3><p className="mt-1 text-sm font-bold">{progress.ranking.scope}</p><p className="mt-2 text-xs text-[#687871]">{progress.ranking.machineClass}</p></article>
           <article className="rounded-2xl border border-[#e7ebe8] p-4"><Clock3 size={18} className="text-[#0d2b24]" aria-hidden="true" /><p className="mt-4 text-[10px] font-bold uppercase tracking-[0.12em] text-[#687871]">Weekly consistency</p><h3 className="mt-2 text-xl font-black">{progress.weeklyConsistency.label}</h3><div className="mt-4"><ProgressBar value={weeklyProgress} label={`${progress.weeklyConsistency.completedDays} of ${progress.weeklyConsistency.targetDays} rowing days completed this week`} /></div><div className="mt-4 flex h-7 items-end gap-1" aria-label="Compact stroke profile showing a controlled drive and recovery rhythm">{progress.weeklyConsistency.strokeProfile.map((height, index) => <span key={index} className="flex-1 rounded-sm bg-[#b8d0c8]" style={{ height: `${height}%` }} />)}</div></article>
         </div>
         <p className="mt-4 flex items-start gap-2 rounded-2xl bg-[#eef3f0] p-4 text-sm font-bold leading-6 text-[#36534a]"><Sparkles size={17} className="mt-1 shrink-0 text-[#d94d1c]" aria-hidden="true" /> {progress.insight}</p>

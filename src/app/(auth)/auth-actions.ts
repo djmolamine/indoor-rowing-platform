@@ -1,62 +1,15 @@
 "use server";
-
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { hasSupabaseConfig } from "@/lib/supabase/config";
+import { getApplicationUrl,hasSupabaseConfig } from "@/lib/supabase/config";
 
-function safeNext(value: FormDataEntryValue | null, fallback = "/dashboard") {
-  return typeof value === "string" && value.startsWith("/") && !value.startsWith("//") ? value : fallback;
-}
+function safeNext(value:FormDataEntryValue|null,fallback="/dashboard"){return typeof value==="string"&&value.startsWith("/")&&!value.startsWith("//")&&!value.includes("\\")?value:fallback;}
+function messageUrl(path:string,key:"error"|"message",value:string){return `${path}?${key}=${encodeURIComponent(value)}`;}
+function authMessage(code?:string){if(code==="invalid_credentials")return "Email or password is incorrect.";if(code==="email_not_confirmed")return "Verify your email before signing in.";if(code==="user_already_exists")return "An account already exists for this email.";if(code==="over_email_send_rate_limit")return "Please wait before requesting another email.";if(code==="weak_password")return "Choose a stronger password.";return "Authentication could not be completed. Please try again.";}
 
-function messageUrl(path: string, key: "error" | "message", value: string) {
-  return `${path}?${key}=${encodeURIComponent(value)}`;
-}
-
-export async function signIn(formData: FormData) {
-  if (!hasSupabaseConfig()) redirect(messageUrl("/sign-in", "error", "Supabase project credentials are not configured yet."));
-  const supabase = await createClient();
-  const email = String(formData.get("email") ?? "").trim();
-  const password = String(formData.get("password") ?? "");
-  const next = safeNext(formData.get("next"));
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) redirect(messageUrl("/sign-in", "error", error.message));
-  redirect(next);
-}
-
-export async function signUp(formData: FormData) {
-  if (!hasSupabaseConfig()) redirect(messageUrl("/sign-up", "error", "Supabase project credentials are not configured yet."));
-  const supabase = await createClient();
-  const origin = (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const email = String(formData.get("email") ?? "").trim();
-  const password = String(formData.get("password") ?? "");
-  if (formData.get("legalAccepted") !== "on") redirect(messageUrl("/sign-up", "error", "Accept the Terms and Privacy Notice to create an account."));
-  const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${origin}/auth/callback?next=/onboarding`, data:{ legal_accepted_at:new Date().toISOString(), terms_version:"2026-07-22", privacy_version:"2026-07-22" } } });
-  if (error) redirect(messageUrl("/sign-up", "error", error.message));
-  if (data.session) redirect("/onboarding");
-  redirect(messageUrl("/sign-in", "message", "Check your email to verify your account, then sign in."));
-}
-
-export async function requestPasswordReset(formData: FormData) {
-  if (!hasSupabaseConfig()) redirect(messageUrl("/forgot-password", "error", "Supabase project credentials are not configured yet."));
-  const supabase = await createClient();
-  const origin = (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const email = String(formData.get("email") ?? "").trim();
-  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${origin}/auth/callback?next=/reset-password` });
-  if (error) redirect(messageUrl("/forgot-password", "error", error.message));
-  redirect(messageUrl("/forgot-password", "message", "If an account exists, a secure reset link has been sent."));
-}
-
-export async function signOut() {
-  if (hasSupabaseConfig()) { const supabase = await createClient(); await supabase.auth.signOut(); }
-  redirect("/sign-in");
-}
-
-export async function changeEmail(formData: FormData) {
-  if (!hasSupabaseConfig()) redirect(messageUrl("/settings", "error", "Supabase project credentials are not configured yet."));
-  const supabase = await createClient();
-  const email = String(formData.get("email") ?? "").trim();
-  const { error } = await supabase.auth.updateUser({ email });
-  if (error) redirect(messageUrl("/settings", "error", error.message));
-  redirect(messageUrl("/settings", "message", "Verification messages were sent as required. Your current email remains active until the change is confirmed."));
-}
+export async function signIn(formData:FormData){if(!hasSupabaseConfig())redirect(messageUrl("/sign-in","error","Authentication is not configured for this environment."));const email=String(formData.get("email")??"").trim().toLowerCase();const password=String(formData.get("password")??"");if(!email||password.length<8)redirect(messageUrl("/sign-in","error","Enter a valid email and password."));const supabase=await createClient();const {error}=await supabase.auth.signInWithPassword({email,password});if(error){console.error("Sign-in failed",error.code);redirect(messageUrl("/sign-in","error",authMessage(error.code)));}redirect(safeNext(formData.get("next")));}
+export async function signUp(formData:FormData){if(!hasSupabaseConfig())redirect(messageUrl("/sign-up","error","Authentication is not configured for this environment."));const email=String(formData.get("email")??"").trim().toLowerCase();const password=String(formData.get("password")??"");const confirmation=String(formData.get("confirmation")??"");if(password!==confirmation)redirect(messageUrl("/sign-up","error","Passwords do not match."));if(password.length<8)redirect(messageUrl("/sign-up","error","Password must contain at least eight characters."));if(formData.get("termsAccepted")!=="on"||formData.get("privacyAccepted")!=="on")redirect(messageUrl("/sign-up","error","Accept the Terms and Privacy Policy to create an account."));const acceptedAt=new Date().toISOString();const supabase=await createClient();const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:`${getApplicationUrl()}/auth/callback?next=/onboarding`,data:{legal_accepted_at:acceptedAt,terms_version:"2026-07-22",privacy_version:"2026-07-22"}}});if(error){console.error("Registration failed",error.code);redirect(messageUrl("/sign-up","error",authMessage(error.code)));}if(data.session)redirect("/onboarding");if(data.user)redirect("/verify-email?email="+encodeURIComponent(email));redirect(messageUrl("/sign-up","error","Registration was not confirmed. Please try again."));}
+export async function requestPasswordReset(formData:FormData){if(!hasSupabaseConfig())redirect(messageUrl("/forgot-password","error","Authentication is not configured for this environment."));const email=String(formData.get("email")??"").trim().toLowerCase();const {error}=await (await createClient()).auth.resetPasswordForEmail(email,{redirectTo:`${getApplicationUrl()}/auth/callback?next=/reset-password`});if(error){console.error("Password reset request failed",error.code);if(error.code==="over_email_send_rate_limit")redirect(messageUrl("/forgot-password","error",authMessage(error.code)));}redirect(messageUrl("/forgot-password","message","If an eligible account exists, password-reset instructions are on their way."));}
+export async function signOut(){if(hasSupabaseConfig()){const {error}=await (await createClient()).auth.signOut();if(error)console.error("Sign-out failed",error.code);}revalidatePath("/","layout");redirect("/sign-in");}
+export async function changeEmail(formData:FormData){if(!hasSupabaseConfig())redirect(messageUrl("/settings","error","Authentication is not configured for this environment."));const email=String(formData.get("email")??"").trim().toLowerCase();const {error}=await (await createClient()).auth.updateUser({email},{emailRedirectTo:`${getApplicationUrl()}/auth/callback?next=/settings`});if(error){console.error("Email change failed",error.code);redirect(messageUrl("/settings","error","The email change could not be started."));}redirect(messageUrl("/settings","message","Confirm the change using the verification messages sent by the authentication service."));}

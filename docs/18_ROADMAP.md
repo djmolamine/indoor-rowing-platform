@@ -17,14 +17,14 @@ This is a living implementation roadmap, not a catalogue of product ideas. It re
 
 ## Product Status
 
-The authenticated prototype now includes canonical workout and competitive-result detail routes with typed seed records, responsive technical metrics, optional telemetry, splits and intervals, machine comparability, verification provenance, and linked ranking, Event, Passport, and Expedition context. Persistence, production evidence review, destructive actions, and provider-backed live data remain planned.
+The repository now contains the Supabase authentication and database foundation: protected cookie sessions, verification and recovery flows, idempotent Profile/Passport creation, generated database contracts, RLS-protected athlete tables, server repositories, persistent onboarding and Passport edits, persistent manual workouts, and private Settings. Applying and validating the migrations against a configured non-production Supabase project remains an operational release gate; no remote success is claimed by repository-only validation.
 
 Rowform is currently a runnable, responsive product prototype with a substantial documentation and data-model foundation. It is not yet a production service. The application builds a coherent athlete experience around realistic typed mock data and session-only prototype state; some profile operations can use Supabase when credentials and migrations are configured.
 
 ### Implemented
 
 - [x] Next.js, TypeScript, and Tailwind CSS application foundation.
-- [x] Public landing page, authentication screens, responsive authenticated shell, and prototype-access path.
+- [x] Public landing page, authentication screens, responsive authenticated shell, and protected-route redirects. The unauthenticated prototype bypass has been removed.
 - [x] Athlete Lobby, workout history and entry prototype, Athlete Passport editor, rankings explorer, Expeditions catalogue and route detail, challenges view, onboarding, and basic settings screens.
 - [x] Typed ISO country, country-dependent city, curated seed-club, machine-provider/model, ranking-region, competition-taxonomy, and Expedition data.
 - [x] Supabase SSR client, session middleware, auth callback, server actions, and forward-only SQL migration files.
@@ -32,7 +32,7 @@ Rowform is currently a runnable, responsive product prototype with a substantial
 
 ### Partially implemented
 
-- [ ] Supabase authentication and profile persistence are coded but require a configured project, applied migrations, provider credentials, and end-to-end security validation.
+- [ ] Supabase authentication, Profile/Passport persistence, onboarding, Settings, and manual workout persistence are implemented in code but still require an applied clean migration, email/provider configuration, and two-user RLS validation in a non-production project.
 - [ ] Workouts can be added to the prototype session, but canonical database persistence, detail pages, editing, attachments, imports, deduplication, and provenance workflows are not complete.
 - [ ] Rankings have typed filters and realistic mock results, but no persisted ranking definitions, eligibility engine, deterministic recalculation job, or verified athlete results.
 - [ ] Expeditions provide eight typed journeys and a reusable route experience, but progress is local prototype state rather than canonical-workout-backed participation.

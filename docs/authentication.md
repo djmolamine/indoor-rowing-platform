@@ -17,7 +17,7 @@
 - Database row-level security remains the final authorization boundary.
 - Authentication remains separate from the Athlete Passport, provider connections, organization roles, and event eligibility.
 
-Facebook is represented as a deferred provider configuration, not a launch method. OAuth buttons may be visible before production credentials exist only when they clearly report that configuration is required.
+Facebook is deferred. Google and Apple buttons render only when the corresponding public capability flag is enabled after the provider is configured in Supabase; dead authentication controls are prohibited.
 
 ## Sign-up and sign-in
 
@@ -28,6 +28,10 @@ Facebook is represented as a deferred provider configuration, not a launch metho
 5. Auth cookies are written securely, and the user is redirected to onboarding after first registration or the Lobby after returning sign-in.
 6. The database trigger creates the minimum application profile on first identity creation.
 7. Onboarding collects display name, country, and date of birth; city, training context, club, preferred machine, and communication permission remain skippable.
+
+Registration collects only email, password and confirmation, plus separate Terms and Privacy Policy acceptance. Expected Supabase errors are translated to stable user-facing language; raw provider messages are not exposed. When verification is required, successful Supabase registration routes to `/verify-email`. `/login` and `/register` are compatibility aliases for `/sign-in` and `/sign-up`.
+
+Password recovery uses `resetPasswordForEmail` with the allow-listed `/auth/callback?next=/reset-password` destination. The callback exchanges the PKCE code into a cookie session before the new-password form can update credentials. Invalid or expired links return a neutral authentication error without exposing token details.
 
 Authentication email is required for account operation and remains private by default. It is read from `auth.users`, never copied into public Passport projections, and changed only through Supabase's verified email-change flow.
 
@@ -48,6 +52,7 @@ Native Event checkout requires an authenticated session, recent authorization fo
 ## Request/session flow
 
 - A lightweight root middleware refreshes expiring auth cookies. It should not perform application authorization.
+- The protected application layout independently verifies `auth.getUser()` to prevent private server rendering when proxy behavior is bypassed.
 - Server code creates a request-scoped Supabase client from cookies.
 - Protected layouts call `auth.getUser()` and redirect unauthenticated users to `/sign-in?next=<safe-path>`.
 - Mutations validate input, obtain the authenticated user server-side, and rely on RLS for row ownership.

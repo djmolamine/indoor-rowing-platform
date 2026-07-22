@@ -95,19 +95,19 @@ export interface LobbyData {
 
 export const lobbyData: LobbyData = {
   athlete: {
-    firstName: "Mohamed",
-    fullName: "Mohamed Djebbari",
-    country: "Algeria",
-    countryCode: "DZ",
-    trainingIdentity: "Independent athlete · Riyadh",
+    firstName: "Athlete",
+    fullName: "Athlete",
+    country: "Not set",
+    countryCode: "",
+    trainingIdentity: "Independent athlete",
     season: "2026 season",
     passport: {
-      status: "Verified",
-      completion: 82,
-      readiness: "Ready for verified event entry",
-      lifetimeDistanceKm: 1842.7,
-      personalBestCount: 9,
-      completedExpeditions: 2,
+      status: "Community",
+      completion: 0,
+      readiness: "Complete the useful parts of your Athlete Passport",
+      lifetimeDistanceKm: 0,
+      personalBestCount: 0,
+      completedExpeditions: 0,
     },
   },
   today: {
@@ -160,15 +160,15 @@ export const lobbyData: LobbyData = {
   progress: {
     personalBest: { distance: "5,000 m", result: "20:41.6", improvement: "8.2 sec faster", date: "18 July", verified: true },
     recentWorkout: { title: "Aerobic intervals", distance: "8,420 m", duration: "38:12", pace: "2:16 /500 m", strokeRate: "23 spm", source: "Manual entry" },
-    ranking: { position: 34, fieldSize: 628, category: "Men 30–39 · Open weight", scope: "Algeria · 2,000 m", machineClass: "Verified standard class" },
+    ranking: { position: 0, fieldSize: 0, category: "Not ranked", scope: "No eligible result", machineClass: "Verification required" },
     weeklyConsistency: { completedDays: 4, targetDays: 5, label: "4 of 5 rowing days", strokeProfile: [38, 55, 48, 70, 66, 78, 62, 83, 74, 58, 44, 32] },
     insight: "Your last three steady rows held a more even split while average stroke rate stayed at 23 spm.",
   },
   community: [
     { id: "milestone", category: "Expedition", message: "Nadia reached Passau on The Danube.", detail: "Three Rivers milestone · 2 hours ago" },
-    { id: "crew", category: "Crew", message: "Riyadh Rowers completed a shared 250 km stage.", detail: "12 athletes contributed · Today" },
+    { id: "crew", category: "Crew", message: "A community crew completed a shared 250 km stage.", detail: "12 athletes contributed · Today" },
     { id: "event", category: "Event", message: "Registration opened for the Mediterranean Indoor Open.", detail: "Virtual and in-person · 14 September" },
-    { id: "national", category: "National", message: "Algerian athletes passed 10,000 km this season.", detail: "184 independent and club athletes" },
+    { id: "national", category: "National", message: "Athletes in one national community passed 10,000 km this season.", detail: "184 independent and club athletes" },
     { id: "pb", category: "Verified result", message: "Yacine set a verified 2,000 m personal best.", detail: "Tier 2 result · 6:58.4" },
   ],
 };

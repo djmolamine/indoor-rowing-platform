@@ -5,7 +5,11 @@ import { getSupabaseConfig, hasSupabaseConfig } from "./config";
 const protectedPrefixes = ["/dashboard", "/workouts", "/profile", "/leaderboard", "/challenges", "/expeditions", "/settings", "/onboarding"];
 
 export async function updateSession(request: NextRequest) {
-  if (!hasSupabaseConfig()) return NextResponse.next({ request });
+  if (!hasSupabaseConfig()) {
+    const protectedRequest = protectedPrefixes.some((prefix) => request.nextUrl.pathname === prefix || request.nextUrl.pathname.startsWith(`${prefix}/`));
+    if (protectedRequest) return NextResponse.redirect(new URL("/sign-in?error=Authentication%20is%20not%20configured%20for%20this%20environment",request.url));
+    return NextResponse.next({ request });
+  }
   let response = NextResponse.next({ request });
   const { url, publishableKey } = getSupabaseConfig();
   const supabase = createServerClient(url, publishableKey, {
@@ -24,7 +28,7 @@ export async function updateSession(request: NextRequest) {
   if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/sign-in";
-    url.searchParams.set("next", request.nextUrl.pathname);
+    url.searchParams.set("next", `${request.nextUrl.pathname}${request.nextUrl.search}`);
     return NextResponse.redirect(url);
   }
   if (user && isAuthPage) return NextResponse.redirect(new URL("/dashboard", request.url));
