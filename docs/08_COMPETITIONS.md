@@ -7,7 +7,7 @@
 | **Status** | Approved |
 | **Owner** | Founders |
 | **Last Reviewed** | 2026-07-22 |
-| **Related Documents** | [Machine Providers](07_MACHINE_PROVIDERS.md), [Athlete Passport](09_ATHLETE_PASSPORT.md), [Notifications](11_NOTIFICATIONS.md), [World Rowing Strategy](15_WORLD_ROWING.md) |
+| **Related Documents** | [Machine Providers](07_MACHINE_PROVIDERS.md), [Athlete Passport](09_ATHLETE_PASSPORT.md), [Notifications](11_NOTIFICATIONS.md), [Events Architecture](19_EVENTS_ARCHITECTURE.md), [World Rowing Strategy](15_WORLD_ROWING.md) |
 
 ## Product role
 
