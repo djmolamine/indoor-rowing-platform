@@ -17,9 +17,14 @@ export interface PassportAthlete {
   countryCode: string;
   city: string;
   cityIsOther: boolean;
+  cityRegion?: string;
+  cityLatitude?: number;
+  cityLongitude?: number;
+  citySource?: "dataset" | "manual";
   trainingContext: TrainingContext;
   selectedClubId: string;
   customClub: CustomClubDraft;
+  preferredMachineId: string;
   memberSince: string;
   currentSeason: string;
   passportId: string;
@@ -113,9 +118,11 @@ export const passportData: PassportData = {
     countryCode: "DZ",
     city: "Algiers",
     cityIsOther: false,
+    citySource: "dataset",
     trainingContext: "Home",
     selectedClubId: "",
     customClub: { officialName: "", countryCode: "DZ", country: "Algeria", city: "Algiers", website: "", federation: "" },
+    preferredMachineId: "concept2-rowerg",
     memberSince: "21 July 2025",
     currentSeason: "2026 season",
     passportId: "RF-DZ-MD-7K2P",

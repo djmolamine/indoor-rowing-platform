@@ -27,16 +27,16 @@ export default function LandingPage() {
         <Brand />
         <nav className="flex items-center gap-2" aria-label="Landing navigation">
           <Link
-            href="/dashboard"
+            href="/sign-in"
             className="hidden rounded-full px-4 py-2 text-sm font-bold text-[#263a34] transition hover:bg-white sm:block"
           >
             Sign in
           </Link>
           <Link
-            href="/dashboard"
+            href="/sign-up"
             className="rounded-full bg-[#0d2b24] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#16483d]"
           >
-            View demo
+            Create account
           </Link>
         </nav>
       </header>
@@ -58,10 +58,10 @@ export default function LandingPage() {
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/dashboard"
+                href="/sign-up"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#ff6b35] px-6 py-3 font-black text-white shadow-[0_8px_30px_rgba(255,107,53,.25)] transition hover:bg-[#e65a27]"
               >
-                Explore the dashboard <ArrowRight size={18} aria-hidden="true" />
+                Create your athlete account <ArrowRight size={18} aria-hidden="true" />
               </Link>
               <a
                 href="#how-it-works"

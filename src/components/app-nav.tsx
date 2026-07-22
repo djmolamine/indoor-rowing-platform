@@ -12,7 +12,7 @@ const items = [
   { label: "Community", href: "/dashboard#community", icon: UsersRound },
   { label: "Expeditions", href: "/expeditions", icon: Route },
   { label: "Events", href: "/dashboard#event", icon: CalendarDays },
-  { label: "Settings", href: "/profile#settings", icon: Settings },
+  { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function AppNav() {

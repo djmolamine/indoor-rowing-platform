@@ -116,6 +116,8 @@ Club membership is optional. Club, team, coach, gym, and federation are separate
 
 Country and territory references use ISO 3166-1 alpha-2 codes alongside localized display names. City selection is country-dependent and must clear or revalidate when the country changes; a reviewed manual locality path remains available because no practical prototype list can contain every city.
 
+City discovery uses a maintained structured country/state/city dataset with alternate regional metadata and coordinates where supplied. It provides broad global and Algerian coverage but is never described as containing every settlement. Athletes always retain an “Other city / not listed” path, and the profile records whether the value came from the dataset or manual entry.
+
 The global club directory is curated rather than open text presented as fact. Club records retain official name, country code, city, club type, website, federation affiliation where known, verification status, source, and active status. Athletes who row at home, in a commercial gym, at a school or university, at a national training centre, or elsewhere do not need a club relationship. If a real club is missing, an athlete may submit its details for review, but the submission remains unverified until an authorized review or federation-backed source confirms it.
 
 ## Minors and delegated access

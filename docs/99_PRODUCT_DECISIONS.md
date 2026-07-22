@@ -45,6 +45,10 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 | PD-012 | Sequence trusted record before public cross-machine competition | Accepted | 2026-07-21 |
 | PD-013 | Use structured geography and a curated club directory | Accepted | 2026-07-22 |
 | PD-014 | Launch eight curated Expeditions through one reusable journey system | Accepted | 2026-07-22 |
+| PD-015 | Use Supabase Auth with private email and linked identities | Accepted | 2026-07-22 |
+| PD-016 | Use maintained city data with a manual fallback | Accepted | 2026-07-22 |
+| PD-017 | Establish explicit geographic ranking scopes | Accepted | 2026-07-22 |
+| PD-018 | Defer coordinated Visual System V2 until foundations stabilize | Accepted | 2026-07-22 |
 
 ## PD-001: Universal machine-independent platform
 
@@ -168,6 +172,46 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Evidence:** [19_EXPEDITIONS.md](19_EXPEDITIONS.md), canonical workout requirements, accessibility standards, and the one-active-journey MVP constraint.
 - **Review trigger:** Evidence that athletes understand concurrent contribution routing, or introduction of licensed map geometry and an administrative publishing workflow.
 - **Related:** [19_EXPEDITIONS.md](19_EXPEDITIONS.md), [06_DATABASE.md](06_DATABASE.md), [10_COMMUNITY.md](10_COMMUNITY.md), [17_MVP_BUILD_PLAN.md](17_MVP_BUILD_PLAN.md)
+
+## PD-015: Supabase identity and private account email
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Decision:** Use Supabase SSR authentication with email/password verification plus Google and Apple OAuth. Facebook is prepared but deferred. Authentication email is required, private by default, changed through a verified account flow, and excluded from public Passport data. Multiple identities link to one auth user and one athlete profile; ambiguous cross-account merges are never automatic.
+- **Rationale:** Secure account recovery and provider choice are necessary without turning contact data into public identity.
+- **Review trigger:** Introduction of a cross-account recovery/merge workflow or another launch login provider.
+- **Related:** [authentication.md](authentication.md), [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md)
+
+## PD-016: Maintained city dataset with manual fallback
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Decision:** Keep ISO country identity locally and use a maintained structured country/state/city dataset for country-filtered city search. Store supplied region and coordinates plus selected/manual provenance. Always support manual city entry and never claim universal settlement coverage.
+- **Rationale:** Global discovery needs broader, maintainable coverage without presenting a partial list as complete.
+- **Review trigger:** Dataset licensing, quality, localization, bundle size, or migration to a server-managed location service.
+- **Related:** [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md), [06_DATABASE.md](06_DATABASE.md)
+
+## PD-017: Geographic ranking hierarchy
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Decision:** Rankings support World, Continent, Country, and Club scopes. Continents use the six-region product taxonomy with an explicit country-to-ranking-region mapping, including documented choices for transcontinental and exceptional territories. Future subregions extend this hierarchy rather than replacing it.
+- **Rationale:** Stable geography makes filters explainable and auditable across datasets and partners.
+- **Review trigger:** Federation adoption of another geography standard or launch of subregional rankings.
+- **Related:** [06_DATABASE.md](06_DATABASE.md), [08_COMPETITIONS.md](08_COMPETITIONS.md)
+
+## PD-018: Visual System V2 sequencing
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Decision:** Limit current visual work to coherent, accessible implementation of foundational flows. Conduct a coordinated product-wide Visual System V2 pass after authentication, profiles, locations, clubs, and rankings stabilize.
+- **Rationale:** System-wide refinement should follow stable product structures rather than repeatedly redesigning temporary states.
+- **Review trigger:** Completion of the authenticated foundation and ranking data model.
+- **Related:** [05_DESIGN_SYSTEM.md](05_DESIGN_SYSTEM.md), [17_MVP_BUILD_PLAN.md](17_MVP_BUILD_PLAN.md)
 
 ## Decision template
 

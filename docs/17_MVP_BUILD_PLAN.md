@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Founding Principles](00_FOUNDING_PRINCIPLES.md), [Product Definition](02_PRODUCT.md), [Product Requirements](product-requirements.md), [Database Foundation](06_DATABASE.md), [Roadmap](13_ROADMAP.md), [Technical Architecture](architecture.md) |
 
 ## Executive Summary
@@ -524,6 +524,14 @@ Future event, federation, and World Rowing APIs are optional later integrations.
 **Deliverables:** In-app inbox, preference center, optional web push, quiet hours, templates, delivery/suppression audit, support procedures, security review, accessibility review, backups, load tests, and incident runbooks.
 
 **Completion Criteria:** Optional sends have valid consent; withdrawal suppresses delivery; critical flows meet accessibility criteria; recovery objectives are tested; launch metrics and rollback criteria are approved.
+
+### Phase 8: Coordinated Visual System V2
+
+**Objective:** Refine Rowform as one coherent product after authenticated flows and data-backed structures are stable.
+
+**Deliverables:** Product-wide navigation and hierarchy review, finalized responsive type and spacing scales, unified form and state patterns, accessible motion, improved provenance and verification presentation, localization/RTL review, and reversible partner-branding rules.
+
+**Completion Criteria:** The refinement is applied consistently across authenticated and public surfaces, meets WCAG 2.2 AA, introduces no regression in core flows, and does not imitate a manufacturer product.
 
 ## Risks
 

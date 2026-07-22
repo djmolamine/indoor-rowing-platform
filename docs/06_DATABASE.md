@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Technical Architecture](architecture.md), [Machine Providers](07_MACHINE_PROVIDERS.md), [Competitions](08_COMPETITIONS.md), [Athlete Passport](09_ATHLETE_PASSPORT.md) |
 
 ## Purpose
@@ -45,9 +45,13 @@ The stable person-level entity behind the Athlete Passport. One account initiall
 
 Each profile attribute should have value, source, verification status, visibility, updated time, and—where relevant—effective dates. Required and optional fields are defined in [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md).
 
+The authenticated athlete profile is one-to-one with `auth.users`. It stores Passport ID, display name, private date of birth, ISO country code, selected or manual city with optional region and coordinates, training context, optional club relationship, preferred machine, biography, visibility, and lifecycle timestamps. Authentication email remains in Supabase Auth and is excluded from public profile projections.
+
 ### Relationships
 
 Club, team, coach, organizer, and federation relationships are dated entities with roles and status. A single `club_id` column on the profile is insufficient because athletes change organizations, can have multiple roles, and need history.
+
+`Club` is a curated directory record with location, official website, federation affiliation, verification status, provenance, and active state. `ClubSubmission` preserves athlete-proposed missing clubs as pending review records with duplicate candidates. Pending submissions never inherit verified presentation.
 
 ## Canonical workout model
 
@@ -132,6 +136,8 @@ Defines event/distance, season, age rules, gender or competition categories, wei
 ### Ranking entry
 
 References an athlete's result and materialized rank. The source result remains authoritative; ranks can be recalculated without rewriting history.
+
+Geographic ranking scope is `World`, `Continent`, `Country`, or `Club`. Country-to-continent assignment uses an explicit reviewed mapping for Africa, Asia, Europe, North America, South America, and Oceania; it is not inferred at query time. The model can add subregional groupings later without changing country identity.
 
 ## Competitions and events
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -21,10 +21,12 @@ import {
 import { PassportSection } from "@/components/passport/passport-section";
 import { VerificationBadge } from "@/components/passport/verification-badge";
 import { SearchCombobox, type ComboboxOption } from "@/components/ui/search-combobox";
-import { citiesForCountry } from "@/lib/location-data/cities";
+import { CityCombobox } from "@/components/ui/city-combobox";
 import { COUNTRIES, getCountry } from "@/lib/location-data/countries";
 import { seedClubsForLocation, SEED_CLUBS } from "@/lib/location-data/seed-clubs";
+import { getMachineModel, MACHINE_MODELS, machineDisplayName } from "@/lib/machine-data";
 import { passportData, type PassportAthlete, type PassportVisibility, type TrainingContext } from "@/lib/passport-data";
+import { saveAthleteProfile } from "@/app/(app)/profile/actions";
 
 const visibilityOptions: { value: PassportVisibility; description: string }[] = [
   { value: "Private", description: "Only you can view your full Passport." },
@@ -34,10 +36,14 @@ const visibilityOptions: { value: PassportVisibility; description: string }[] = 
 ];
 
 const fieldClass = "mt-1.5 min-h-11 w-full rounded-xl border border-[#ccd6d1] bg-white px-3 text-sm font-bold text-[#13211d] outline-none transition focus:border-[#16725e] focus:ring-2 focus:ring-[#16725e]/20";
-const OTHER_CITY = "__other_city__";
 const MISSING_CLUB = "__missing_club__";
 const trainingContexts: TrainingContext[] = ["Home", "Commercial gym", "Rowing club", "School or university", "National training centre", "Other"];
 const countryOptions: ComboboxOption[] = COUNTRIES.map((country) => ({ id: country.code, label: country.name, description: country.code }));
+const OTHER_MACHINE = "__other_machine__";
+const machineOptions: ComboboxOption[] = [
+  ...MACHINE_MODELS.map((machine) => ({ id: machine.id, label: machineDisplayName(machine), description: machine.machineClass })),
+  { id: OTHER_MACHINE, label: "My machine is not listed", description: "Enter its provider and model manually" },
+];
 
 function percentage(value: number, total: number) { return Math.round((value / total) * 100); }
 
@@ -49,17 +55,18 @@ function athleteIdentity(athlete: PassportAthlete) {
   return { Home: "Home athlete", "Commercial gym": "Commercial gym athlete", "School or university": "University athlete", "National training centre": "National training centre athlete", Other: "Independent athlete" }[athlete.trainingContext];
 }
 
-export function AthletePassport() {
-  const [athlete, setAthlete] = useState<PassportAthlete>(passportData.athlete);
-  const [draft, setDraft] = useState<PassportAthlete>(passportData.athlete);
+export function AthletePassport({ initialAthlete = passportData.athlete }: { initialAthlete?: PassportAthlete }) {
+  const [athlete, setAthlete] = useState<PassportAthlete>(initialAthlete);
+  const [draft, setDraft] = useState<PassportAthlete>(initialAthlete);
   const [editorVersion, setEditorVersion] = useState(0);
   const [formError, setFormError] = useState("");
+  const [directoryClubs, setDirectoryClubs] = useState<Array<{ id:string; officialName:string; city:string; clubType:string; verificationStatus:string; activeStatus:string; sourceLabel:string }>>([]);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const expedition = passportData.expeditions.active;
   const expeditionProgress = percentage(expedition.completedKm, expedition.totalKm);
   const identity = athleteIdentity(athlete);
-  const cityOptions: ComboboxOption[] = [...citiesForCountry(draft.countryCode).map((city) => ({ id: city.name, label: city.name })), { id: OTHER_CITY, label: "Other city", description: "Enter a city or locality manually" }];
-  const availableClubs = seedClubsForLocation(draft.countryCode, draft.city);
+  useEffect(() => { if (!draft.countryCode || !draft.city) return; const controller=new AbortController(); fetch(`/api/clubs?country=${draft.countryCode}&city=${encodeURIComponent(draft.city)}`,{signal:controller.signal}).then((response)=>response.ok?response.json():{clubs:[]}).then((payload:{clubs:typeof directoryClubs})=>setDirectoryClubs(payload.clubs)).catch(()=>undefined); return ()=>controller.abort(); },[draft.countryCode,draft.city]);
+  const availableClubs = directoryClubs.length ? directoryClubs : seedClubsForLocation(draft.countryCode, draft.city);
   const clubOptions: ComboboxOption[] = [...availableClubs.map((club) => ({ id: club.id, label: club.officialName, description: `${club.city} · ${club.clubType} · ${club.verificationStatus}` })), { id: MISSING_CLUB, label: "My club is not listed", description: "Submit club details for future review" }];
 
   function openEditor() {
@@ -69,11 +76,15 @@ export function AthletePassport() {
     dialogRef.current?.showModal();
   }
 
-  function savePrototypeChanges(event: FormEvent<HTMLFormElement>) {
+  async function savePrototypeChanges(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!draft.countryCode || !draft.city) { setFormError("Choose a country and city, or enter an Other city value."); return; }
     if (draft.trainingContext === "Rowing club" && !draft.selectedClubId) { setFormError("Choose a club or select “My club is not listed.”"); return; }
     if (draft.trainingContext === "Rowing club" && draft.selectedClubId === MISSING_CLUB && !draft.customClub.officialName.trim()) { setFormError("Enter the club name for review."); return; }
+    if (!draft.preferredMachineId) { setFormError("Choose a rowing machine or select “My machine is not listed.”"); return; }
+    if (draft.preferredMachineId === OTHER_MACHINE && !draft.preferredMachine.trim()) { setFormError("Enter the provider and model of your rowing machine."); return; }
+    const result = await saveAthleteProfile(draft);
+    if (!result.persisted && !result.message.startsWith("Prototype")) { setFormError(result.message); return; }
     setAthlete(draft);
     dialogRef.current?.close();
   }
@@ -174,33 +185,24 @@ export function AthletePassport() {
               required
               onChange={(countryCode) => {
                 const country = getCountry(countryCode);
-                setDraft((current) => ({ ...current, countryCode, country: country?.name ?? "", city: "", cityIsOther: false, selectedClubId: "", customClub: { ...current.customClub, countryCode, country: country?.name ?? "", city: "" } }));
+                setDraft((current) => ({ ...current, countryCode, country: country?.name ?? "", city: "", cityRegion:undefined, cityLatitude:undefined, cityLongitude:undefined, citySource:undefined, cityIsOther: false, selectedClubId: "", customClub: { ...current.customClub, countryCode, country: country?.name ?? "", city: "" } }));
               }}
             />
-            <div>
-              <SearchCombobox
-                key={`${editorVersion}-${draft.countryCode}`}
-                label="Training city"
-                value={draft.cityIsOther ? OTHER_CITY : draft.city}
-                options={cityOptions}
-                placeholder={draft.countryCode ? "Search cities" : "Choose a country first"}
-                required
-                disabled={!draft.countryCode}
-                onChange={(cityValue) => setDraft((current) => ({ ...current, city: cityValue === OTHER_CITY ? "" : cityValue, cityIsOther: cityValue === OTHER_CITY, selectedClubId: "", customClub: { ...current.customClub, city: cityValue === OTHER_CITY ? "" : cityValue } }))}
-              />
-              {draft.cityIsOther && <label className="mt-3 block text-xs font-bold text-[#475b54]">Other city or locality<input required className={fieldClass} value={draft.city} onChange={(event) => setDraft((current) => ({ ...current, city: event.target.value, customClub: { ...current.customClub, city: event.target.value } }))} /></label>}
-              <p className="mt-2 text-[11px] leading-5 text-[#718078]">Prototype cities are curated by country and are not a complete world city database.</p>
-            </div>
+            <CityCombobox key={`${editorVersion}-${draft.countryCode}`} countryCode={draft.countryCode} required value={draft.city ? { name:draft.city, countryCode:draft.countryCode, region:draft.cityRegion, latitude:draft.cityLatitude, longitude:draft.cityLongitude, source:draft.citySource ?? (draft.cityIsOther ? "manual" : "dataset") } : null} onChange={(city) => setDraft((current) => ({ ...current, city:city?.name ?? "", cityRegion:city?.region, cityLatitude:city?.latitude, cityLongitude:city?.longitude, citySource:city?.source, cityIsOther:city?.source === "manual", selectedClubId:"", customClub:{ ...current.customClub, city:city?.name ?? "" } }))} />
             <label className="text-xs font-bold text-[#475b54]">Where do you usually row?<select className={fieldClass} value={draft.trainingContext} onChange={(event) => setDraft((current) => ({ ...current, trainingContext: event.target.value as TrainingContext, selectedClubId: event.target.value === "Rowing club" ? current.selectedClubId : "" }))}>{trainingContexts.map((context) => <option key={context}>{context}</option>)}</select><span className="mt-2 block text-[11px] font-normal leading-5 text-[#718078]">Club membership is optional and never required for an Athlete Passport.</span></label>
 
             {draft.trainingContext === "Rowing club" && <div className="rounded-2xl border border-[#dfe5e1] bg-[#f8faf8] p-4 sm:col-span-2">
               <SearchCombobox key={`${editorVersion}-${draft.countryCode}-${draft.city}`} label="Rowing club" value={draft.selectedClubId} options={clubOptions} placeholder="Search the local seed directory" required disabled={!draft.countryCode || !draft.city} onChange={(selectedClubId) => setDraft((current) => ({ ...current, selectedClubId }))} />
               <p className="mt-2 text-[11px] leading-5 text-[#718078]">This is a small, incomplete directory sourced from official club websites. “Source reviewed” does not mean federation verified.</p>
-              {draft.selectedClubId && draft.selectedClubId !== MISSING_CLUB && (() => { const club = SEED_CLUBS.find((item) => item.id === draft.selectedClubId); return club ? <div className="mt-3 rounded-xl bg-white p-3 text-xs"><p className="font-black">{club.officialName}</p><p className="mt-1 text-[#718078]">{club.city} · {club.clubType} · {club.activeStatus}</p><p className="mt-1 text-[#16725e]">{club.verificationStatus} · {club.source.label}</p></div> : null; })()}
+              {draft.selectedClubId && draft.selectedClubId !== MISSING_CLUB && (() => { const club = availableClubs.find((item) => item.id === draft.selectedClubId); return club ? <div className="mt-3 rounded-xl bg-white p-3 text-xs"><p className="font-black">{club.officialName}</p><p className="mt-1 text-[#718078]">{club.city} · {club.clubType} · {club.activeStatus}</p><p className="mt-1 text-[#16725e]">{club.verificationStatus} · {"source" in club ? club.source.label : club.sourceLabel}</p></div> : null; })()}
               {draft.selectedClubId === MISSING_CLUB && <fieldset className="mt-4 grid gap-4 border-t border-[#dfe5e1] pt-4 sm:grid-cols-2"><legend className="sr-only">Missing club submission</legend><label className="text-xs font-bold text-[#475b54] sm:col-span-2">Club official name<input required className={fieldClass} value={draft.customClub.officialName} onChange={(event) => setDraft((current) => ({ ...current, customClub: { ...current.customClub, officialName: event.target.value } }))} /></label><label className="text-xs font-bold text-[#475b54]">Country<input readOnly className={`${fieldClass} bg-[#eef3f0]`} value={`${draft.country} (${draft.countryCode})`} /></label><label className="text-xs font-bold text-[#475b54]">City<input readOnly className={`${fieldClass} bg-[#eef3f0]`} value={draft.city} /></label><label className="text-xs font-bold text-[#475b54]">Website <span className="font-normal">(optional)</span><input type="url" className={fieldClass} value={draft.customClub.website} onChange={(event) => setDraft((current) => ({ ...current, customClub: { ...current.customClub, website: event.target.value } }))} /></label><label className="text-xs font-bold text-[#475b54]">Federation <span className="font-normal">(optional)</span><input className={fieldClass} value={draft.customClub.federation} onChange={(event) => setDraft((current) => ({ ...current, customClub: { ...current.customClub, federation: event.target.value } }))} /></label><p className="rounded-xl bg-[#fff7f2] p-3 text-xs leading-5 text-[#6d4a3a] sm:col-span-2">Submitted clubs would enter a review queue. They would not appear as verified until their identity, source, and federation relationship were checked.</p></fieldset>}
             </div>}
 
-            <label className="text-xs font-bold text-[#475b54] sm:col-span-2">Preferred machine<input className={fieldClass} value={draft.preferredMachine} onChange={(event) => setDraft({ ...draft, preferredMachine: event.target.value })} /></label>
+            <div className="sm:col-span-2">
+              <SearchCombobox key={`${editorVersion}-${draft.preferredMachineId}`} label="Preferred rowing machine" value={draft.preferredMachineId} options={machineOptions} placeholder="Search providers and models" required onChange={(preferredMachineId) => { const machine = getMachineModel(preferredMachineId); setDraft((current) => ({ ...current, preferredMachineId, preferredMachine: machine ? machineDisplayName(machine) : preferredMachineId === OTHER_MACHINE ? "" : current.preferredMachine })); }} />
+              {draft.preferredMachineId === OTHER_MACHINE && <label className="mt-3 block text-xs font-bold text-[#475b54]">Provider and model<input required className={fieldClass} placeholder="For example: provider and model name" value={draft.preferredMachine} onChange={(event) => setDraft((current) => ({ ...current, preferredMachine: event.target.value }))} /></label>}
+              <p className="mt-2 text-[11px] leading-5 text-[#718078]">This records your preference only. It does not connect a provider account or imply equivalent performance across machine classes.</p>
+            </div>
             <label className="text-xs font-bold text-[#475b54] sm:col-span-2">Biography<textarea rows={3} className={`${fieldClass} py-3`} value={draft.biography} onChange={(event) => setDraft({ ...draft, biography: event.target.value })} /></label>
             <label className="text-xs font-bold text-[#475b54] sm:col-span-2">Passport visibility<select className={fieldClass} value={draft.visibility} onChange={(event) => setDraft({ ...draft, visibility: event.target.value as PassportVisibility })}>{visibilityOptions.map((option) => <option key={option.value}>{option.value}</option>)}</select></label>
           </div>

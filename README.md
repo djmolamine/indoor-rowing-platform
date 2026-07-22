@@ -2,7 +2,7 @@
 
 A universal, mobile-first indoor rowing platform that normalizes workouts from many machines and import methods into one canonical model.
 
-The repository includes the first runnable product shell: a responsive landing page, dashboard, workouts, leaderboard, challenges, and profile views. All application data is currently mocked; Supabase is intentionally not connected yet.
+The repository includes the runnable Rowform shell plus Supabase SSR authentication, athlete-profile persistence, structured location search, curated club submissions, regional ranking foundations, and cinematic Expeditions. Workout aggregation remains mocked while the canonical model is implemented incrementally.
 
 ## Product principles
 
@@ -18,7 +18,7 @@ The repository includes the first runnable product shell: a responsive landing p
 - React 19 and TypeScript
 - Tailwind CSS 4
 - Lucide icons
-- Supabase and Vercel are planned but not connected in this version
+- Supabase authentication and persistence through environment-provided project credentials
 
 ## Repository layout
 
@@ -49,10 +49,13 @@ From the repository root, run exactly:
 
 ```bash
 npm install
+Copy-Item .env.example .env.local
 npm run dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000).
+Set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `NEXT_PUBLIC_SITE_URL` in `.env.local`. Apply `supabase/migrations/0001_initial_schema.sql` followed by `supabase/migrations/0002_athlete_identity_locations_rankings.sql`, then open [http://localhost:3000](http://localhost:3000).
+
+Email/password works when Supabase email authentication and redirect URLs are enabled. Google and Apple additionally require provider-console credentials and matching callback URLs.
 
 To verify and run the production build locally:
 
@@ -67,16 +70,19 @@ To run the lint checks:
 npm run lint
 ```
 
-No environment variables are required for this mock-data version.
+Without Supabase environment variables the application remains buildable and exposes a clearly labeled local prototype mode, but live authentication and persistence are unavailable.
 
 ## Available routes
 
 - `/` — public landing page
-- `/dashboard` — authenticated-product shell preview
+- `/sign-in`, `/sign-up`, `/forgot-password`, `/reset-password` — account access and recovery
+- `/onboarding` — concise athlete identity setup
+- `/dashboard` — authenticated athlete Lobby
 - `/workouts` — mock workout history and import actions
-- `/leaderboard` — mock monthly community ranking
+- `/leaderboard` — World, continent, country, and club ranking prototype
 - `/challenges` — mock challenge progress
-- `/profile` — mock user preferences and account summary
+- `/profile` — persisted Athlete Passport with private-by-default fields
+- `/settings` — verified email and session controls
 
 ## Architectural decisions
 
@@ -90,4 +96,4 @@ See [Product requirements](docs/product-requirements.md), [Technical architectur
 
 ## Status
 
-First runnable frontend complete. The next milestone is Supabase client setup and authentication plumbing, followed by manual workout entry through the canonical workout model.
+Authenticated athlete identity, location, club-submission, and regional ranking foundations are implemented. The next data-backed milestone is manual workout persistence through the canonical workout model.

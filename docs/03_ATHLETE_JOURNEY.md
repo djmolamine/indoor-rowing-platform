@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Product Definition](02_PRODUCT.md), [Personas](04_PERSONAS.md), [Athlete Passport](09_ATHLETE_PASSPORT.md), [Metrics](16_METRICS.md) |
 
 ## Journey principles
@@ -29,9 +29,9 @@ The visitor starts account creation or explores public events because the machin
 
 ## Stage 2: Create the minimum account
 
-Collect email, display name, country or territory, time zone, and acceptance of current terms and privacy notice. Request date of birth or age band only when required for safeguarding, eligibility, or an immediately selected feature. Preferred language may be inferred and confirmed.
+Account creation collects email, password or social identity, and acceptance of current terms and privacy notice. After verification, concise onboarding collects display name, country or territory, and date of birth for safeguarding and competition eligibility. Authentication email and exact birth date remain private.
 
-Do not ask for club, federation, gender, weight, machine ownership, biography, phone number, or marketing permission during minimum account creation unless the athlete has chosen a flow that strictly requires one of them.
+Do not ask for club, federation, gender, weight, machine ownership, biography, phone number, or marketing permission during account creation. City, training context, club, preferred machine, and communication preferences are optional onboarding steps with an explained benefit and a skip path.
 
 ### Progressive profile prompt pattern
 

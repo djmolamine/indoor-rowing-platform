@@ -1,0 +1,9 @@
+import Link from "next/link";
+import { AuthCard, authInputClass } from "@/components/auth/auth-card";
+import { OAuthButtons } from "@/components/auth/oauth-buttons";
+import { signIn } from "../auth-actions";
+
+export default async function SignInPage({ searchParams }: { searchParams: Promise<{ error?: string; message?: string; next?: string }> }) {
+  const query = await searchParams;
+  return <AuthCard eyebrow="Welcome back" title="Sign in to Rowform" description="Continue to your private athlete record and Lobby."><div className="mt-6"><OAuthButtons /></div><div className="my-5 flex items-center gap-3 text-xs text-[#8a9691]"><span className="h-px flex-1 bg-[#e3e8e5]" />or use email<span className="h-px flex-1 bg-[#e3e8e5]" /></div>{query.error && <p role="alert" className="mb-4 rounded-xl bg-[#fff1eb] p-3 text-sm font-bold text-[#a43f20]">{query.error}</p>}{query.message && <p role="status" className="mb-4 rounded-xl bg-[#eaf6f1] p-3 text-sm font-bold text-[#176a55]">{query.message}</p>}<form action={signIn} className="space-y-4"><input type="hidden" name="next" value={query.next ?? "/dashboard"} /><label className="block text-xs font-bold text-[#475b54]">Email<input className={authInputClass} name="email" type="email" autoComplete="email" required /></label><label className="block text-xs font-bold text-[#475b54]">Password<input className={authInputClass} name="password" type="password" autoComplete="current-password" minLength={8} required /></label><div className="flex justify-end"><Link href="/forgot-password" className="text-xs font-bold text-[#16725e] underline">Forgot password?</Link></div><button className="min-h-12 w-full rounded-full bg-[#ff6b35] px-5 font-black text-white hover:bg-[#e95b29]">Sign in</button></form><p className="mt-5 text-center text-sm text-[#62706b]">New to Rowform? <Link href="/sign-up" className="font-black text-[#16725e] underline">Create an account</Link></p></AuthCard>;
+}

@@ -6,28 +6,36 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Athlete Passport](09_ATHLETE_PASSPORT.md), [Database Foundation](06_DATABASE.md), [Notifications](11_NOTIFICATIONS.md), [Technical Architecture](architecture.md) |
 
 ## Goals
 
 - Supabase Auth is the identity provider.
-- The web app supports email magic link or one-time password first; OAuth providers can be added later.
+- The web app supports email/password with verification, plus Google and Apple OAuth through the same cookie-based PKCE session architecture.
 - Sessions work correctly across Server Components, Server Actions, Route Handlers, and the browser.
 - Database row-level security remains the final authorization boundary.
 - Authentication remains separate from the Athlete Passport, provider connections, organization roles, and event eligibility.
 
-Supabase is not connected in the current mock application. This document defines the approved implementation flow.
+Facebook is represented as a deferred provider configuration, not a launch method. OAuth buttons may be visible before production credentials exist only when they clearly report that configuration is required.
 
 ## Sign-up and sign-in
 
-1. A visitor opens `/sign-in` or `/sign-up`.
-2. The client requests an email link/OTP from Supabase Auth with an allow-listed redirect to `/auth/callback`.
+1. A visitor opens `/sign-in` or `/sign-up` and chooses email/password, Google, or Apple.
+2. Email/password registration sends verification through Supabase Auth. OAuth uses PKCE with an allow-listed redirect to `/auth/callback`.
 3. Supabase redirects to `/auth/callback` with an authorization code.
 4. A Route Handler exchanges the code for a session using the server Supabase client.
-5. Auth cookies are written securely, and the user is redirected to `/workouts`.
+5. Auth cookies are written securely, and the user is redirected to onboarding after first registration or the Lobby after returning sign-in.
 6. The database trigger creates the minimum application profile on first identity creation.
-7. The onboarding flow collects only the additional required fields defined by the Athlete Passport and records acceptance of the current terms and privacy notice with version, locale, and timestamp.
+7. Onboarding collects display name, country, and date of birth; city, training context, club, preferred machine, and communication permission remain skippable.
+
+Authentication email is required for account operation and remains private by default. It is read from `auth.users`, never copied into public Passport projections, and changed only through Supabase's verified email-change flow.
+
+## Login identities and linking
+
+One Supabase auth user controls one athlete profile. Additional Google, Apple, or password identities must be linked to that existing auth user rather than creating another `profiles` row. Provider identity records are authentication metadata, not Athlete Passport affiliations.
+
+Automatic merging by matching email alone is unsafe: Apple relay addresses, changed provider emails, aliases, unverified addresses, and an attacker controlling a newly recycled address can all create ambiguity. Cross-account merging remains an explicit, recently authenticated recovery workflow requiring proof of control over both identities. Until that workflow is designed, the product must prevent silent merges and direct ambiguous cases to support.
 
 Do not put privileged profile initialization in browser code.
 

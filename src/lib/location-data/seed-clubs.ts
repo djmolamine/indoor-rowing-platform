@@ -22,7 +22,7 @@ export interface SeedClub {
  */
 export const SEED_CLUBS: SeedClub[] = [
   {
-    id: "gb-leander",
+    id: "00000000-0000-4000-8000-000000000101",
     officialName: "Leander Club",
     countryCode: "GB",
     city: "Henley-on-Thames",
@@ -34,7 +34,7 @@ export const SEED_CLUBS: SeedClub[] = [
     activeStatus: "Active",
   },
   {
-    id: "gb-tideway-scullers",
+    id: "00000000-0000-4000-8000-000000000102",
     officialName: "Tideway Scullers School",
     countryCode: "GB",
     city: "London",
@@ -46,7 +46,7 @@ export const SEED_CLUBS: SeedClub[] = [
     activeStatus: "Active",
   },
   {
-    id: "us-riverside-boat-club",
+    id: "00000000-0000-4000-8000-000000000103",
     officialName: "Riverside Boat Club",
     countryCode: "US",
     city: "Cambridge",
@@ -58,7 +58,7 @@ export const SEED_CLUBS: SeedClub[] = [
     activeStatus: "Active",
   },
   {
-    id: "us-community-rowing",
+    id: "00000000-0000-4000-8000-000000000104",
     officialName: "Community Rowing, Inc.",
     countryCode: "US",
     city: "Boston",
@@ -70,7 +70,7 @@ export const SEED_CLUBS: SeedClub[] = [
     activeStatus: "Active",
   },
   {
-    id: "au-sydney-rowing-club",
+    id: "00000000-0000-4000-8000-000000000105",
     officialName: "Sydney Rowing Club",
     countryCode: "AU",
     city: "Sydney",
@@ -82,7 +82,7 @@ export const SEED_CLUBS: SeedClub[] = [
     activeStatus: "Active",
   },
   {
-    id: "au-uts-haberfield",
+    id: "00000000-0000-4000-8000-000000000106",
     officialName: "UTS Haberfield Rowing Club",
     countryCode: "AU",
     city: "Sydney",
@@ -94,7 +94,7 @@ export const SEED_CLUBS: SeedClub[] = [
     activeStatus: "Active",
   },
   {
-    id: "ch-rowing-club-lausanne",
+    id: "00000000-0000-4000-8000-000000000107",
     officialName: "Rowing Club Lausanne",
     countryCode: "CH",
     city: "Lausanne",
@@ -106,7 +106,7 @@ export const SEED_CLUBS: SeedClub[] = [
     activeStatus: "Active",
   },
   {
-    id: "de-berliner-ruder-club",
+    id: "00000000-0000-4000-8000-000000000108",
     officialName: "Berliner Ruder-Club",
     countryCode: "DE",
     city: "Berlin",

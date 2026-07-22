@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Founding Principles](00_FOUNDING_PRINCIPLES.md), [Product Definition](02_PRODUCT.md), [Athlete Journey](03_ATHLETE_JOURNEY.md), [Navigation](navigation.md) |
 
 ## Design objective
@@ -110,3 +110,7 @@ Consent, visibility, verification, sender identity, and destructive actions must
 ## Governance
 
 Design tokens, component behavior, accessibility criteria, content patterns, and provider attribution rules require documented ownership. New components should solve repeated product needs rather than one page. Any partner co-branding must be reversible and must preserve the platform's independent identity. Related principles are in [00_FOUNDING_PRINCIPLES.md](00_FOUNDING_PRINCIPLES.md).
+
+## Visual System V2 milestone
+
+A coordinated product-wide Visual System V2 pass follows stabilization of authentication, onboarding, data-backed Athlete Passport fields, location controls, club governance, and regional rankings. Until then, new foundational flows should match the current Rowform palette, typography, spacing, focus treatment, and mobile behavior without creating isolated redesigns. V2 will review the application as one system: navigation, type scale, responsive density, motion, form patterns, empty/loading/error states, data provenance, accessibility, and partner-ready branding.
