@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Founding Principles](00_FOUNDING_PRINCIPLES.md), [Competitions](08_COMPETITIONS.md), [Notifications](11_NOTIFICATIONS.md), [Business Model](12_BUSINESS_MODEL.md) |
 
 ## Position
@@ -37,6 +37,7 @@ World Rowing compatibility creates discipline even before a partnership. A globa
 - Consented communications from official senders.
 - Safeguarding and minor protections.
 - Adaptive and inclusive competition support.
+- Versioned event configuration for World Rowing indoor age rules, lightweight evidence, IAR classifications, formats, and verification authorities; no current championship programme is treated as permanent platform taxonomy.
 - Localization, time zones, and cross-border data governance.
 - Official sender and brand controls.
 - Event-grade reliability and auditability.

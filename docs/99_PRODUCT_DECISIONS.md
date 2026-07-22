@@ -213,6 +213,20 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Review trigger:** Completion of the authenticated foundation and ranking data model.
 - **Related:** [05_DESIGN_SYSTEM.md](05_DESIGN_SYSTEM.md), [17_MVP_BUILD_PLAN.md](17_MVP_BUILD_PLAN.md)
 
+## PD-019: Event-configurable competition and ranking taxonomy
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Context:** Mock filters collapsed competition identity and supported too few formats to represent credible indoor rowing competition.
+- **Decision:** Rowform uses stable, reusable definitions for competition divisions, weight categories, derived individual indoor age bands, event-defined adaptive classifications, fixed-distance, fixed-time and relay formats, machine classes, verification requirements, and official-status classification. Lightweight eligibility requires separate event weigh-in evidence. A result is official only within an authorized event definition; 10K, 20K, and other platform formats remain Rowform standards unless an event authority says otherwise.
+- **Rationale:** Transparent, versioned taxonomy enables credible rankings without hardcoding one organizer's changing programme or implying endorsement.
+- **Consequences:** Date of birth plus an event calculation date determines age category. Fixed-distance rankings sort elapsed time ascending; fixed-time rankings sort completed distance descending; relays remain separate. Adaptive classifications can change by event without component changes. Personal gender, profile weight, event eligibility, weigh-in evidence, and result division remain distinct records.
+- **Alternatives:** One permanent World Rowing category table; manually selected age bands; profile weight as lightweight proof; a universal machine leaderboard; unlabeled platform rankings.
+- **Evidence:** World Rowing's 2025 championship guidance, 2026 Virtual Indoor Championship and Virtual Series rules, and 2026 Indoor Adaptive Rowing material reviewed 2026-07-22.
+- **Review trigger:** World Rowing rule changes, an official partnership, introduction of production competition registration, or evidence that a machine comparability definition is unsafe.
+- **Related:** [08_COMPETITIONS.md](08_COMPETITIONS.md), [06_DATABASE.md](06_DATABASE.md), [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md), [15_WORLD_ROWING.md](15_WORLD_ROWING.md)
+
 ## Decision template
 
 Copy this structure for new records:

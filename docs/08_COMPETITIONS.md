@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Machine Providers](07_MACHINE_PROVIDERS.md), [Athlete Passport](09_ATHLETE_PASSPORT.md), [Notifications](11_NOTIFICATIONS.md), [World Rowing Strategy](15_WORLD_ROWING.md) |
 
 ## Product role
@@ -64,6 +64,28 @@ Rules are versioned and immutable after competition start except through a visib
 - Correction, protest, and appeal windows.
 
 Athletes acknowledge event-specific terms separately from platform terms.
+
+## Competition taxonomy
+
+Competition divisions are Men, Women, Lightweight Men, Lightweight Women, and Adaptive / Para. `Open participation` is reserved for non-championship community challenges whose rules intentionally do not separate competition divisions. Personal gender or competition eligibility is stored separately from a result's event-defined division.
+
+Recent World Rowing indoor structures inform the default individual age bands: Under 19, Under 23, Senior 23–39, five-year Masters bands from 40–44 through 85–89, and Masters 90+. Event configuration may additionally enable Under 13, Under 15, or Under 17 youth bands. Age is derived from date of birth using an event-owned calculation date; the general seasonal default is age on 31 December of the competition year. Athletes do not self-select an age category when date of birth is available. These individual indoor bands are distinct from the on-water Masters A–M crew-average system and must never be substituted for it.
+
+Lightweight eligibility is event-specific. The current indoor limits used by World Rowing are a maximum of 75.0 kg for Lightweight Men and 61.5 kg for Lightweight Women. Editable profile weight cannot establish eligibility. A competition weigh-in records its own evidence and one of: declared, evidence submitted, organizer verified, or federation verified.
+
+Adaptive / Para is the primary discovery division. Its child classifications are versioned event configuration containing category code, display name, applicable distance or duration, eligibility status, and verification authority. Rowform can load IAR or another organizer-approved structure without changing page components and does not turn a trial classification into a permanent global category.
+
+### Ranking formats and scoring
+
+- Fixed-distance targets are stored in meters and ranked by shortest elapsed time.
+- Fixed-time targets are stored in seconds and ranked by greatest completed distance.
+- Relay results are team results and remain separate from individual rankings.
+- Supported fixed distances are 100 m, 250 m, 500 m, 1,000 m, 2,000 m, 5,000 m, 6,000 m, 10,000 m, 20,000 m, half marathon (21,097 m), and marathon (42,195 m).
+- Supported fixed times are 1 minute, 4 minutes, 30 minutes, and 60 minutes. Relay definitions support 2,000 m and 5,000 m.
+
+Every definition is labeled as a World Rowing official event, federation official event, organizer official event, Rowform standard ranking, or community challenge. A format is official only within the specific programme and rule version that grants that status. The 10K, 20K, and other platform standards are labeled Rowform standard unless an authorized event definition states otherwise.
+
+Official references reviewed on 2026-07-22: [2026 World Rowing Virtual Indoor Championships](https://worldrowing.com/2026-world-rowing-virtual-indoor-championships-presented-by-concept2/), [2026 World Rowing Virtual Series](https://worldrowing.com/event/2026-world-rowing-virtual-series/), [Indoor Adaptive Rowing](https://worldrowing.com/technical/para-rowing/indoor-adaptive-rowing/), and the [2025 championship Q&A](https://worldrowing.com/2025/01/08/qa-about-the-2025-world-rowing-indoor-championships-presented-by-concept2/).
 
 ## Verification tiers
 

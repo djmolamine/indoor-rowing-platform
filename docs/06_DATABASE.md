@@ -131,7 +131,9 @@ A derived claim referencing the underlying workout/result, record definition, ma
 
 ### Ranking definition
 
-Defines event/distance, season, age rules, gender or competition categories, weight category, geography, club/federation scope, machine eligibility, verification threshold, tie-breaking, privacy requirements, and publication status.
+Defines event format, distance in meters or duration in seconds, season, configurable age calculation date and category rules, competition division, weight category, geography, club/federation scope, machine eligibility, verification requirement, official-status classification, tie-breaking, privacy requirements, and publication status. Fixed-distance and relay definitions have a distance target and produce elapsed-time results; fixed-time definitions have a duration target and produce completed-distance results. The database prevents one entry from mixing both result measures.
+
+Competition division is not an alias for personal gender. Lightweight eligibility references an event-specific `CompetitionWeighIn` and its evidence state rather than editable profile weight. `AdaptiveClassification` is owned by an event edition and stores code, display label, applicable distance or duration, eligibility status, verification authority, and active state. This permits event-defined IAR or adaptive structures without schema or page changes.
 
 ### Ranking entry
 

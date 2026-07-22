@@ -114,6 +114,8 @@ The athlete sees the fields, recipient, purpose, duration, and revocation behavi
 
 Club membership is optional. Club, team, coach, gym, and federation are separate relationship types with effective dates and roles. Athletes may have multiple relationships unless a particular competition rule limits representation. Changing affiliation does not rewrite historical results.
 
+Competition readiness derives age categories from private date of birth and the relevant event calculation date. Personal gender or eligibility attributes remain distinct from event result categories. Profile weight is editable personal data and never proves lightweight eligibility; competition weigh-in evidence is separately protected, event-specific, and visibly attributed. Adaptive eligibility and classification are sensitive claims disclosed only for an athlete-selected event purpose.
+
 Country and territory references use ISO 3166-1 alpha-2 codes alongside localized display names. City selection is country-dependent and must clear or revalidate when the country changes; a reviewed manual locality path remains available because no practical prototype list can contain every city.
 
 City discovery uses a maintained structured country/state/city dataset with alternate regional metadata and coordinates where supplied. It provides broad global and Algerian coverage but is never described as containing every settlement. Athletes always retain an “Other city / not listed” path, and the profile records whether the value came from the dataset or manual entry.
