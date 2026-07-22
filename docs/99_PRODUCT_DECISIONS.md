@@ -52,6 +52,7 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 | PD-019 | Use event-configurable competition and ranking taxonomy | Accepted | 2026-07-22 |
 | PD-020 | Maintain a curated machine provider and model catalogue | Accepted | 2026-07-22 |
 | PD-021 | Establish Events as a commercial platform pillar | Accepted | 2026-07-22 |
+| PD-022 | Link competitive results to authoritative workout detail | Accepted | 2026-07-22 |
 
 ## PD-001: Universal machine-independent platform
 
@@ -259,6 +260,20 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Related:** [19_EVENTS_ARCHITECTURE.md](19_EVENTS_ARCHITECTURE.md), [06_DATABASE.md](06_DATABASE.md), [08_COMPETITIONS.md](08_COMPETITIONS.md), [18_ROADMAP.md](18_ROADMAP.md)
 
 ## Decision template
+
+## PD-022: Linked workout and result detail
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Context:** Athletes need one credible technical record behind workouts, personal bests, rankings, Events, Passport history, and Expedition contributions without disconnected copies of the same performance.
+- **Decision:** Every canonical workout can expose a detailed technical view. Ranking and Event results are separate rule-governed records that reference the authoritative workout where one exists. Telemetry, splits, intervals, and provider-specific metrics are optional and retain their source basis. Verification provenance and official correction history are append-only; Athlete Passport visibility governs public sharing.
+- **Rationale:** A linked model gives rowers expected technical depth while preserving athlete ownership, provider neutrality, competition integrity, and privacy.
+- **Consequences:** Result pages must not duplicate canonical metrics, synthesize missing telemetry, imply unsupported verification, or expose private notes and device identifiers. Changes to ranked workouts trigger eligibility recalculation; official corrections supersede history.
+- **Alternatives:** Independent page-specific mock records; provider-shaped technical schemas; synthetic charts for summary-only imports; editable official result rows.
+- **Evidence:** Canonical workout, verification, ranking, Event, Athlete Passport, and Expedition architecture.
+- **Review trigger:** Production persistence, first live provider telemetry import, organizer correction tooling, or public result sharing.
+- **Related:** [06_DATABASE.md](06_DATABASE.md), [07_MACHINE_PROVIDERS.md](07_MACHINE_PROVIDERS.md), [08_COMPETITIONS.md](08_COMPETITIONS.md), [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md), [19_EVENTS_ARCHITECTURE.md](19_EVENTS_ARCHITECTURE.md)
 
 Copy this structure for new records:
 

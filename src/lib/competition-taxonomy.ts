@@ -7,7 +7,7 @@ export type MachineClassId = "all-comparable" | "static-air-resistance" | "dynam
 
 export interface TaxonomyOption<T extends string> { id: T; label: string }
 export interface AgeCategory extends TaxonomyOption<string> { minimumAge: number; maximumAge: number | null; kind: "youth" | "championship" | "masters"; optional?: boolean }
-export interface EventFormat extends TaxonomyOption<string> { kind: RankingFormatKind; targetMeters?: number; targetSeconds?: number; officialStatus: OfficialStatusId }
+export interface EventFormat extends TaxonomyOption<string> { kind: RankingFormatKind; targetMeters?: number; targetSeconds?: number; /** @deprecated Use targetMeters. */ distanceMeters?: number; /** @deprecated Use targetSeconds. */ durationSeconds?: number; officialStatus: OfficialStatusId }
 export interface AdaptiveClassification extends TaxonomyOption<string> { eventId: string; applicableFormatIds: string[]; eligibilityStatus: "self-declared" | "evidence-submitted" | "confirmed"; verificationAuthority: string; demonstration?: boolean }
 
 export const COMPETITION_DIVISIONS: TaxonomyOption<CompetitionDivisionId>[] = [

@@ -17,6 +17,8 @@ This is a living implementation roadmap, not a catalogue of product ideas. It re
 
 ## Product Status
 
+The authenticated prototype now includes canonical workout and competitive-result detail routes with typed seed records, responsive technical metrics, optional telemetry, splits and intervals, machine comparability, verification provenance, and linked ranking, Event, Passport, and Expedition context. Persistence, production evidence review, destructive actions, and provider-backed live data remain planned.
+
 Rowform is currently a runnable, responsive product prototype with a substantial documentation and data-model foundation. It is not yet a production service. The application builds a coherent athlete experience around realistic typed mock data and session-only prototype state; some profile operations can use Supabase when credentials and migrations are configured.
 
 ### Implemented

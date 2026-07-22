@@ -87,8 +87,17 @@ export interface EventResult {
   registrationId: string;
   athleteId: string;
   athleteName: string;
+  age: number;
+  countryCode: string;
+  affiliation: string;
+  divisionLabel: string;
+  machineLabel: string;
+  resultType: "Race" | "Verified" | "Submitted";
   resultValue: number;
   displayResult: string;
+  pacePer500m: string;
+  averageWatts?: number;
+  averageSpm?: number;
   status: ResultStatus;
   verificationAuthority: string;
   verificationTier: Exclude<VerificationId, "all-accepted">;

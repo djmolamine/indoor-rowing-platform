@@ -79,6 +79,8 @@ Passport claims can include:
 
 Each claim identifies issuer, evidence type, verification tier, issue date, expiry/revocation, and visibility. Future standards-based credentials may be supported, but the platform should not expose raw legal documents to routine partners.
 
+Personal bests, competition history, ranking milestones, and linked timeline entries open the applicable result detail. A competitive claim references its underlying canonical workout where available, while the Athlete Passport controls whether a public-safe presentation can expose the athlete name, core metrics, machine attribution, verification, Event, and ranking position. Private notes, contact details, precise routine locations, device identifiers, and protected evidence are never included in shared result projections.
+
 ## Visibility model
 
 Default: private.

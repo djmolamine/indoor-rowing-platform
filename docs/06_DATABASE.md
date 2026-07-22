@@ -213,3 +213,9 @@ Export must include understandable and machine-readable representations. Deletio
 - Backfills are idempotent and observable.
 - Provider adapters are versioned independently from schema migrations.
 - Canonical meaning changes require a recorded decision in [99_PRODUCT_DECISIONS.md](99_PRODUCT_DECISIONS.md).
+
+## Detailed workout and result records
+
+Every canonical workout can expose a detailed technical view without requiring every provider to supply the same depth. Summary metrics remain on `Workout`; ordered `WorkoutSplit`, `WorkoutInterval`, and optional `WorkoutSample` records preserve exact imported structure and sample basis. Missing data remains `NULL`, telemetry is never synthesized from a summary, and provider-specific metrics belong in a structured extension associated with its provider and schema version.
+
+`Result` remains a competitive claim rather than a copy of workout metrics. Ranking and Event results reference the authoritative `Workout` where one exists; organizer-issued results may exist without a workout when their rules permit. `ResultVerification`, `ResultRanking`, `ResultEventContext`, `WorkoutMachineDetail`, protected `WorkoutAttachment`, and append-only `ResultAuditHistory` preserve provenance, comparability, context, evidence, and corrections. Official corrections supersede prior versions instead of overwriting them. Purpose-built public projections enforce Athlete Passport visibility and exclude private notes, device identifiers, protected evidence, and private location data.

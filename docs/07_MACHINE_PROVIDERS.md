@@ -85,6 +85,8 @@ For every field, mapping documentation must say:
 
 Do not infer metrics simply because they are common on another machine. A provider that exposes distance and duration only should produce a valid limited workout.
 
+Every workout may expose a detailed technical view, but telemetry, splits, intervals, resistance, drag, monitor data, and device metadata remain optional capabilities. Exact provider splits are retained rather than recalculated. Time-series samples record their basisâ€”per stroke, per second, per split, or estimatedâ€”and summary-only imports never receive synthetic telemetry. Provider-specific metrics use a versioned structured extension so fields such as drag factor do not become mandatory assumptions for unrelated machines.
+
 ## Comparability classes
 
 Machine-independent history and cross-machine competition are different problems. Each competition or ranking uses an explicit class:

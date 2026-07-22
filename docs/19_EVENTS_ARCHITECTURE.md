@@ -303,6 +303,8 @@ Rankings are projections over eligible Event results, not fields manually typed 
 
 The canonical workout is the athlete-owned performance record. A Result may reference it but cannot mutate its source data. Corrections to either side trigger eligibility review rather than silent synchronization. Organizer-uploaded results can exist without a canonical workout if the Event rules permit, while still retaining provenance.
 
+Event result rows open a result detail that shows race, organizer, stage, lane or remote entry, entry number, placing, state, authority, and registration reference. When a canonical workout exists, the page links to it and reads technical metrics, splits, telemetry, machine details, and provenance from that record. Event corrections append an audit entry and supersede the prior result; athletes cannot directly edit an official Event result.
+
 ### Achievements
 
 Achievements reference the Event, Competition, issuer, rule version, claim type, and result. Visibility is athlete-controlled. Revoked or corrected results supersede dependent achievements through an auditable workflow.

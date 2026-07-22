@@ -134,6 +134,8 @@ Distinguish:
 
 Records reference the underlying result and rule version. Editing an underlying workout can suspend or supersede the record until revalidated.
 
+Ranking rows open a result detail record showing the active definition, eligibility population, categories, geography, machine constraints, verification threshold, result date, and personal-best state. Where the result derives from a canonical workout, the detail links to that authoritative technical record instead of duplicating its metrics. Back-links preserve the exact ranking filter definition. Results outside a definition never display a position within it, and official corrections retain an auditable supersession history.
+
 ## Registration and identity
 
 The platform may host registration or hand off to an official external system. In either case, it should explain what data leaves the platform. Passport credentials can reduce repeated entry, but the athlete approves each disclosure.
