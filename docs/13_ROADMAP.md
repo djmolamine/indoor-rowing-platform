@@ -7,7 +7,7 @@
 | **Status** | Approved |
 | **Owner** | Founders |
 | **Last Reviewed** | 2026-07-21 |
-| **Related Documents** | [Vision](01_VISION.md), [Product Definition](02_PRODUCT.md), [Business Model](12_BUSINESS_MODEL.md), [Metrics](16_METRICS.md) |
+| **Related Documents** | [Vision](01_VISION.md), [Product Definition](02_PRODUCT.md), [Business Model](12_BUSINESS_MODEL.md), [Metrics](16_METRICS.md), [Development Roadmap](18_ROADMAP.md) |
 
 ## Roadmap philosophy
 
