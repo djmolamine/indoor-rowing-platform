@@ -25,6 +25,7 @@ import { CityCombobox } from "@/components/ui/city-combobox";
 import { COUNTRIES, getCountry } from "@/lib/location-data/countries";
 import { seedClubsForLocation, SEED_CLUBS } from "@/lib/location-data/seed-clubs";
 import { getMachineModel, MACHINE_MODELS, machineDisplayName } from "@/lib/machine-data";
+import { labelFor, MACHINE_CLASSES } from "@/lib/competition-taxonomy";
 import { passportData, type PassportAthlete, type PassportVisibility, type TrainingContext } from "@/lib/passport-data";
 import { saveAthleteProfile } from "@/app/(app)/profile/actions";
 
@@ -41,7 +42,7 @@ const trainingContexts: TrainingContext[] = ["Home", "Commercial gym", "Rowing c
 const countryOptions: ComboboxOption[] = COUNTRIES.map((country) => ({ id: country.code, label: country.name, description: country.code }));
 const OTHER_MACHINE = "__other_machine__";
 const machineOptions: ComboboxOption[] = [
-  ...MACHINE_MODELS.map((machine) => ({ id: machine.id, label: machineDisplayName(machine), description: machine.machineClass })),
+  ...MACHINE_MODELS.map((machine) => ({ id: machine.id, label: machineDisplayName(machine), description: labelFor(MACHINE_CLASSES, machine.suggestedClassId) })),
   { id: OTHER_MACHINE, label: "My machine is not listed", description: "Enter its provider and model manually" },
 ];
 

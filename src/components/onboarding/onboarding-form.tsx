@@ -6,10 +6,11 @@ import { CityCombobox } from "@/components/ui/city-combobox";
 import { COUNTRIES } from "@/lib/location-data/countries";
 import type { CitySelection } from "@/lib/location-data/types";
 import { MACHINE_MODELS, machineDisplayName } from "@/lib/machine-data";
+import { labelFor, MACHINE_CLASSES } from "@/lib/competition-taxonomy";
 import { completeOnboarding } from "@/app/(app)/onboarding/actions";
 
 const countries: ComboboxOption[] = COUNTRIES.map((country) => ({ id: country.code, label: country.name, description: country.code }));
-const machines: ComboboxOption[] = MACHINE_MODELS.map((machine) => ({ id: machine.id, label: machineDisplayName(machine), description: machine.machineClass }));
+const machines: ComboboxOption[] = MACHINE_MODELS.map((machine) => ({ id: machine.id, label: machineDisplayName(machine), description: labelFor(MACHINE_CLASSES, machine.suggestedClassId) }));
 const inputClass = "mt-1.5 min-h-11 w-full rounded-xl border border-[#ccd6d1] bg-white px-3 text-sm font-bold outline-none focus:border-[#16725e] focus:ring-2 focus:ring-[#16725e]/20";
 
 export function OnboardingForm() {

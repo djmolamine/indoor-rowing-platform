@@ -3,7 +3,7 @@ export type WeightCategoryId = "open-weight" | "lightweight";
 export type RankingFormatKind = "fixed-distance" | "fixed-time" | "relay-distance";
 export type OfficialStatusId = "world-rowing-official" | "federation-official" | "organizer-official" | "rowform-standard" | "community-challenge";
 export type VerificationId = "all-accepted" | "manual" | "photo-confirmed" | "provider-imported" | "device-attested" | "organizer-verified" | "federation-certified";
-export type MachineClassId = "all-comparable" | "static-flywheel" | "dynamic" | "water-resistance" | "air-resistance" | "provider-specific" | "event-approved";
+export type MachineClassId = "all-comparable" | "static-air-resistance" | "dynamic-air-resistance" | "water-resistance" | "air-resistance" | "magnetic" | "hybrid-resistance" | "event-approved" | "unknown";
 
 export interface TaxonomyOption<T extends string> { id: T; label: string }
 export interface AgeCategory extends TaxonomyOption<string> { minimumAge: number; maximumAge: number | null; kind: "youth" | "championship" | "masters"; optional?: boolean }
@@ -51,10 +51,10 @@ export const OFFICIAL_STATUSES: TaxonomyOption<OfficialStatusId>[] = [
 ];
 
 export const MACHINE_CLASSES: TaxonomyOption<MachineClassId>[] = [
-  { id:"all-comparable", label:"All comparable machines" }, { id:"static-flywheel", label:"Static flywheel" },
-  { id:"dynamic", label:"Dynamic" }, { id:"water-resistance", label:"Water resistance" },
-  { id:"air-resistance", label:"Air resistance" }, { id:"provider-specific", label:"Provider-specific class" },
-  { id:"event-approved", label:"Event-approved machine class" },
+  { id:"all-comparable", label:"Comparable machines only" }, { id:"static-air-resistance", label:"Static air-resistance" },
+  { id:"dynamic-air-resistance", label:"Dynamic air-resistance" }, { id:"water-resistance", label:"Water-resistance" },
+  { id:"air-resistance", label:"Air-resistance" }, { id:"magnetic", label:"Magnetic" },
+  { id:"hybrid-resistance", label:"Hybrid resistance" }, { id:"event-approved", label:"Event-approved class" }, { id:"unknown", label:"Unknown" },
 ];
 
 export const VERIFICATION_OPTIONS: TaxonomyOption<VerificationId>[] = [

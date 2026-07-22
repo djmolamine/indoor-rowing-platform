@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Founding Principles](00_FOUNDING_PRINCIPLES.md), [Database Foundation](06_DATABASE.md), [Competitions](08_COMPETITIONS.md), [Technical Architecture](architecture.md) |
 
 ## Objective
@@ -22,6 +22,16 @@ Support Concept2, RP3, WaterRower, Technogym, Matrix, Bluetooth devices, manual 
 5. Raw provider semantics are retained for traceability.
 6. Failure in one adapter cannot compromise other providers or canonical history.
 7. Provider partnerships do not grant ownership of athlete identity or unrelated data.
+
+## Curated provider and model catalogue
+
+The machine market is sufficiently bounded for Rowform to maintain a canonical catalogue rather than accepting uncontrolled brand strings. The initial providers are Concept2, RP3, WaterRower, Technogym, Matrix, Life Fitness, NordicTrack, Hydrow, Aviron, Peloton Row, Ergatta, Domyos, StairMaster, Other, and Unknown. Each has a stable key, active/retired state, supported machine classes, reviewed models, connection capabilities, comparability status, verification capability, and optional icon reference.
+
+Provider, model, and machine class are separate concepts. Provider identifies the manufacturer or product ecosystem; model identifies a product family; machine class describes the measurement and resistance system used by an event or ranking rule. A model may suggest a likely class, but imports preserve the supplied class and athletes may correct manual attribution without rewriting the catalogue.
+
+Imported aliases normalize to canonical provider keys. For example, `Concept 2`, `ConceptTwo`, and `C2` resolve to `concept2`; they never create duplicate providers. Catalogue additions, aliases, retirement, and model corrections are administrator-reviewed. Providers with changing or uncertain model ranges support explicit Other model and Unknown model states instead of speculative entries.
+
+Unknown brand, model, or class never blocks a training record. Unknown equipment is excluded from strict competitive rankings by default, although an event-specific rule can admit it for participation or after organizer verification.
 
 ## Provider categories
 
@@ -86,6 +96,8 @@ Machine-independent history and cross-machine competition are different problems
 - Non-comparable training history.
 
 Any normalization intended for competitive equivalence requires published methodology, versioning, validation, appeals, and partner governance. The default is no hidden equivalence.
+
+Comparability evaluates provider, model, explicit machine class, event rule, and verification together. Rowform presents one of four understandable outcomes: Same machine model, Same provider class, Cross-provider comparable, or Participation only. Concept2 static models can share a definition only when its rule permits; RP3 dynamic results normally use a separate provider class; water-resistance equipment defaults to provider-specific or participation-only comparison; and named event-approved equipment can override general platform rules through a versioned event definition.
 
 ## Initial provider priorities
 

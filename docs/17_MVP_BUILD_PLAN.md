@@ -252,6 +252,7 @@ This journey is a build sequence as well as a product flow. Rankings and communi
 - Manual/photo, provider-signed, and stronger tiers are not visually conflated.
 - One athlete contributes only the eligible best result per ranking definition.
 - Ranking definitions distinguish fixed distance, fixed time, and relay scoring; competition division, derived age category, event-specific lightweight evidence, adaptive classification, official status, machine comparability, and verification provenance are configuration rather than page constants.
+- Workout entry and rankings use the same curated provider/model catalogue, alias normalization, explicit machine classes, and versioned comparability rules. Unknown equipment remains loggable but is excluded from strict rankings unless a named rule permits it.
 - Ranking recalculation is deterministic and auditable.
 
 **Dependencies:** Standard-effort definitions, personal records, machine classes, verification tiers, Passport fields, privacy projections, and admin rule configuration.

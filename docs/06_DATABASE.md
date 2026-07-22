@@ -105,6 +105,10 @@ Separate:
 
 A provider may serve multiple machine types. A physical gym machine may be used by many athletes. A workout can name a model without requiring ownership. Comparability classes are versioned rule objects, not hardcoded provider assumptions.
 
+`MachineProvider` is a curated canonical record with stable key, display name, active state, supported classes, connection capabilities, ranking comparability status, verification capability, and optional icon. `MachineProviderAlias` normalizes imported spellings to that key. `MachineModel` belongs to one provider and stores a stable key, reviewed name, suggested class, capabilities, and active state. Other and Unknown remain explicit controlled values.
+
+Every workout may preserve provider key, model key or reviewed free-text fallback, explicit machine class, connection/source method, and verification provenance independently of its physical machine instance. Ranking definitions can constrain provider, model, and class; materialized entries retain the machine attribution used when eligibility was calculated. Strict rankings reject unknown equipment unless a versioned event rule explicitly permits it.
+
 ## Verification model
 
 Verification is an append-only evidence chain:

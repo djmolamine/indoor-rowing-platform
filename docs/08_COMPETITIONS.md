@@ -85,6 +85,8 @@ Adaptive / Para is the primary discovery division. Its child classifications are
 
 Every definition is labeled as a World Rowing official event, federation official event, organizer official event, Rowform standard ranking, or community challenge. A format is official only within the specific programme and rule version that grants that status. The 10K, 20K, and other platform standards are labeled Rowform standard unless an authorized event definition states otherwise.
 
+Machine eligibility is expressed separately as provider, model, and class constraints. Ranking filters can narrow all three without implying equivalence. A result row exposes the actual provider and known model plus its class and verification. Cross-provider tables require an explicit comparability rule and visible label; provider-specific tables name the provider. Unknown machine records remain useful training history but do not enter strict rankings by default.
+
 Official references reviewed on 2026-07-22: [2026 World Rowing Virtual Indoor Championships](https://worldrowing.com/2026-world-rowing-virtual-indoor-championships-presented-by-concept2/), [2026 World Rowing Virtual Series](https://worldrowing.com/event/2026-world-rowing-virtual-series/), [Indoor Adaptive Rowing](https://worldrowing.com/technical/para-rowing/indoor-adaptive-rowing/), and the [2025 championship Q&A](https://worldrowing.com/2025/01/08/qa-about-the-2025-world-rowing-indoor-championships-presented-by-concept2/).
 
 ## Verification tiers

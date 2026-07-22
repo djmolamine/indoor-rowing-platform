@@ -1,31 +1,46 @@
-export type MachineClass = "Air resistance" | "Dynamic" | "Water resistance" | "Electromagnetic" | "Bluetooth FTMS" | "Other";
+import type { MachineClassId } from "@/lib/competition-taxonomy";
 
-export interface MachineModel {
-  id: string;
-  provider: string;
-  model: string;
-  machineClass: MachineClass;
-}
+export type MachineProviderId = "concept2"|"rp3"|"waterrower"|"technogym"|"matrix"|"life-fitness"|"nordictrack"|"hydrow"|"aviron"|"peloton-row"|"ergatta"|"domyos"|"stairmaster"|"other"|"unknown";
+export type ConnectionCapability = "manual"|"photo-ocr"|"file-import"|"bluetooth"|"local-device"|"cloud-api";
+export type ProviderComparability = "model-specific"|"provider-class"|"conditional-cross-provider"|"participation-only"|"unknown-excluded";
 
-/** Prototype catalog for attribution only; inclusion does not imply an integration or partnership. */
-export const MACHINE_MODELS: MachineModel[] = [
-  { id: "concept2-rowerg", provider: "Concept2", model: "RowErg", machineClass: "Air resistance" },
-  { id: "concept2-model-d", provider: "Concept2", model: "Model D", machineClass: "Air resistance" },
-  { id: "concept2-model-e", provider: "Concept2", model: "Model E", machineClass: "Air resistance" },
-  { id: "concept2-dynamic", provider: "Concept2", model: "Dynamic Indoor Rower", machineClass: "Dynamic" },
-  { id: "rp3-model-s", provider: "RP3", model: "Model S", machineClass: "Dynamic" },
-  { id: "rp3-model-t", provider: "RP3", model: "Model T", machineClass: "Dynamic" },
-  { id: "waterrower-original", provider: "WaterRower", model: "Original Series", machineClass: "Water resistance" },
-  { id: "waterrower-performance", provider: "WaterRower", model: "Performance Ergometer", machineClass: "Water resistance" },
-  { id: "technogym-skillrow", provider: "Technogym", model: "Skillrow", machineClass: "Electromagnetic" },
-  { id: "matrix-rower", provider: "Matrix", model: "Rower", machineClass: "Electromagnetic" },
-  { id: "bluetooth-ftms", provider: "Bluetooth", model: "FTMS-compatible rower", machineClass: "Bluetooth FTMS" },
+export interface MachineModel { id:string; providerId:MachineProviderId; model:string; suggestedClassId:Exclude<MachineClassId,"all-comparable">; active:boolean }
+export interface MachineProvider { id:MachineProviderId; displayName:string; active:boolean; aliases:string[]; supportedClassIds:Exclude<MachineClassId,"all-comparable">[]; models:MachineModel[]; connectionCapabilities:ConnectionCapability[]; rankingComparability:ProviderComparability; officialVerificationCapability:boolean; iconReference?:string }
+
+const models=(providerId:MachineProviderId,items:Array<[string,string,MachineModel["suggestedClassId"]]>):MachineModel[]=>items.map(([id,model,suggestedClassId])=>({id,providerId,model,suggestedClassId,active:true}));
+
+export const MACHINE_PROVIDERS:MachineProvider[]=[
+  {id:"concept2",displayName:"Concept2",active:true,aliases:["Concept 2","ConceptTwo","C2","Concept II"],supportedClassIds:["static-air-resistance","dynamic-air-resistance"],models:models("concept2",[["concept2-rowerg","RowErg","static-air-resistance"],["concept2-model-d","Model D","static-air-resistance"],["concept2-model-e","Model E","static-air-resistance"],["concept2-dynamic","Dynamic Indoor Rower","dynamic-air-resistance"]]),connectionCapabilities:["manual","photo-ocr","file-import","bluetooth","local-device","cloud-api"],rankingComparability:"model-specific",officialVerificationCapability:true,iconReference:"provider/concept2"},
+  {id:"rp3",displayName:"RP3",active:true,aliases:["RP 3","RP3 Rowing"],supportedClassIds:["dynamic-air-resistance"],models:models("rp3",[["rp3-model-s","RP3 Model S","dynamic-air-resistance"],["rp3-model-t","RP3 Model T","dynamic-air-resistance"]]),connectionCapabilities:["manual","photo-ocr","file-import","bluetooth","local-device"],rankingComparability:"provider-class",officialVerificationCapability:false,iconReference:"provider/rp3"},
+  {id:"waterrower",displayName:"WaterRower",active:true,aliases:["Water Rower","WaterRower Inc"],supportedClassIds:["water-resistance"],models:models("waterrower",[["waterrower-original","Original Series","water-resistance"],["waterrower-performance","Performance Ergometer","water-resistance"],["waterrower-smartrow","SmartRow-equipped WaterRower","water-resistance"]]),connectionCapabilities:["manual","photo-ocr","file-import","bluetooth","cloud-api"],rankingComparability:"participation-only",officialVerificationCapability:false,iconReference:"provider/waterrower"},
+  {id:"technogym",displayName:"Technogym",active:true,aliases:["TechnoGym","Techno Gym"],supportedClassIds:["hybrid-resistance"],models:models("technogym",[["technogym-skillrow","Skillrow","hybrid-resistance"]]),connectionCapabilities:["manual","photo-ocr","bluetooth","cloud-api"],rankingComparability:"provider-class",officialVerificationCapability:false},
+  {id:"matrix",displayName:"Matrix",active:true,aliases:["Matrix Fitness"],supportedClassIds:["magnetic"],models:models("matrix",[["matrix-rower","Rower","magnetic"],["matrix-rower-02","Rower-02","magnetic"]]),connectionCapabilities:["manual","photo-ocr","bluetooth"],rankingComparability:"provider-class",officialVerificationCapability:false},
+  {id:"life-fitness",displayName:"Life Fitness",active:true,aliases:["LifeFitness"],supportedClassIds:["magnetic"],models:[],connectionCapabilities:["manual","photo-ocr","bluetooth"],rankingComparability:"provider-class",officialVerificationCapability:false},
+  {id:"nordictrack",displayName:"NordicTrack",active:true,aliases:["Nordic Track"],supportedClassIds:["magnetic"],models:[],connectionCapabilities:["manual","photo-ocr","bluetooth","cloud-api"],rankingComparability:"provider-class",officialVerificationCapability:false},
+  {id:"hydrow",displayName:"Hydrow",active:true,aliases:[],supportedClassIds:["magnetic"],models:models("hydrow",[["hydrow-rower","Hydrow","magnetic"],["hydrow-wave","Hydrow Wave","magnetic"]]),connectionCapabilities:["manual","photo-ocr","cloud-api"],rankingComparability:"provider-class",officialVerificationCapability:false},
+  {id:"aviron",displayName:"Aviron",active:true,aliases:[],supportedClassIds:["magnetic"],models:models("aviron",[["aviron-impact","Impact Series","magnetic"],["aviron-strong","Strong Series","magnetic"]]),connectionCapabilities:["manual","photo-ocr","cloud-api"],rankingComparability:"provider-class",officialVerificationCapability:false},
+  {id:"peloton-row",displayName:"Peloton Row",active:true,aliases:["Peloton","PelotonRow"],supportedClassIds:["magnetic"],models:models("peloton-row",[["peloton-row","Peloton Row","magnetic"],["peloton-row-plus","Peloton Row+","magnetic"]]),connectionCapabilities:["manual","photo-ocr","cloud-api"],rankingComparability:"provider-class",officialVerificationCapability:false},
+  {id:"ergatta",displayName:"Ergatta",active:true,aliases:[],supportedClassIds:["water-resistance"],models:models("ergatta",[["ergatta-rower","Ergatta Rower","water-resistance"],["ergatta-lite","Ergatta Lite","water-resistance"]]),connectionCapabilities:["manual","photo-ocr","bluetooth","cloud-api"],rankingComparability:"participation-only",officialVerificationCapability:false},
+  {id:"domyos",displayName:"Domyos",active:true,aliases:["Decathlon Domyos","Decathlon"],supportedClassIds:["magnetic","hybrid-resistance"],models:[],connectionCapabilities:["manual","photo-ocr","bluetooth"],rankingComparability:"provider-class",officialVerificationCapability:false},
+  {id:"stairmaster",displayName:"StairMaster",active:true,aliases:["Stair Master"],supportedClassIds:["air-resistance"],models:[],connectionCapabilities:["manual","photo-ocr"],rankingComparability:"provider-class",officialVerificationCapability:false},
+  {id:"other",displayName:"Other",active:true,aliases:[],supportedClassIds:["static-air-resistance","dynamic-air-resistance","water-resistance","air-resistance","magnetic","hybrid-resistance","unknown"],models:[],connectionCapabilities:["manual","photo-ocr","file-import","bluetooth"],rankingComparability:"participation-only",officialVerificationCapability:false},
+  {id:"unknown",displayName:"Unknown",active:true,aliases:["Unspecified","N/A","Not known"],supportedClassIds:["unknown"],models:[],connectionCapabilities:["manual"],rankingComparability:"unknown-excluded",officialVerificationCapability:false},
 ];
 
-export function getMachineModel(id: string) {
-  return MACHINE_MODELS.find((machine) => machine.id === id);
-}
+export const MACHINE_MODELS=MACHINE_PROVIDERS.flatMap((provider)=>provider.models);
+export const OTHER_MODEL_ID="other-model"; export const UNKNOWN_MODEL_ID="unknown-model";
+export const CONNECTION_METHODS=[{id:"manual",label:"Manual entry"},{id:"photo-ocr",label:"Photo / OCR"},{id:"file-import",label:"File import"},{id:"bluetooth",label:"Bluetooth device"},{id:"local-device",label:"Direct device"},{id:"cloud-api",label:"Provider import"}] as const;
 
-export function machineDisplayName(machine: Pick<MachineModel, "provider" | "model">) {
-  return `${machine.provider} ${machine.model}`;
+const normalized=(value:string)=>value.trim().toLocaleLowerCase().replace(/[^a-z0-9]+/g,"");
+export function normalizeProviderAlias(value:string):MachineProviderId { const key=normalized(value); return MACHINE_PROVIDERS.find((provider)=>normalized(provider.displayName)===key||provider.aliases.some((alias)=>normalized(alias)===key))?.id??"other"; }
+export function getMachineProvider(id:string){return MACHINE_PROVIDERS.find((provider)=>provider.id===id)}
+export function getMachineModel(id:string){return MACHINE_MODELS.find((model)=>model.id===id)}
+export function modelsForProvider(providerId:MachineProviderId){return getMachineProvider(providerId)?.models.filter((model)=>model.active)??[]}
+export function machineDisplayName(machine:MachineModel){return `${getMachineProvider(machine.providerId)?.displayName??"Unknown"} ${machine.model}`}
+
+export type ComparabilityLabel="Same machine model"|"Same provider class"|"Cross-provider comparable"|"Participation only";
+export function comparabilityLabel(providerId:MachineProviderId,modelId:string,machineClassId:MachineModel["suggestedClassId"],filter:{providerId:MachineProviderId|"all";modelId:string;machineClassId:MachineClassId;multipleProviders?:boolean}):ComparabilityLabel {
+  if(filter.modelId!=="all")return "Same machine model"; if(filter.providerId!=="all"||!filter.multipleProviders)return "Same provider class";
+  const provider=getMachineProvider(providerId); return provider?.rankingComparability==="conditional-cross-provider"||["static-air-resistance","dynamic-air-resistance"].includes(machineClassId)?"Cross-provider comparable":"Participation only";
 }
+export function eligibleForStrictRanking(providerId:MachineProviderId,modelId:string,machineClassId:MachineModel["suggestedClassId"],providerScoped=false){const status=getMachineProvider(providerId)?.rankingComparability;return providerId!=="unknown"&&modelId!==UNKNOWN_MODEL_ID&&machineClassId!=="unknown"&&(status==="model-specific"||status==="conditional-cross-provider"||(providerScoped&&status==="provider-class"));}

@@ -227,6 +227,20 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Review trigger:** World Rowing rule changes, an official partnership, introduction of production competition registration, or evidence that a machine comparability definition is unsafe.
 - **Related:** [08_COMPETITIONS.md](08_COMPETITIONS.md), [06_DATABASE.md](06_DATABASE.md), [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md), [15_WORLD_ROWING.md](15_WORLD_ROWING.md)
 
+## PD-020: Curated machine provider and model catalogue
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Context:** Generic machine classes alone hide meaningful equipment identity, while arbitrary manufacturer text creates duplicates and unsafe ranking assumptions.
+- **Decision:** Maintain a small canonical catalogue of machine providers and reviewed models with stable IDs, active state, aliases, capabilities, suggested classes, verification capability, and comparability status. Provider, model, physical machine, connection source, and machine class remain separate. Workouts accept Other and Unknown; strict rankings exclude unknown or participation-only equipment unless a versioned event rule permits it.
+- **Rationale:** Indoor rowing has a manageable provider market, so curation produces clearer athlete records and safer comparison without making the canonical workout manufacturer-dependent.
+- **Consequences:** Adapters normalize aliases before persistence. Model selection may suggest a class but cannot silently establish competitive equivalence. Ranking definitions can be same-model, same-provider-class, cross-provider comparable, or participation-only, and every result exposes its attribution.
+- **Alternatives:** Free-text providers; class-only UI; one universal cross-machine leaderboard; a provider table created opportunistically by imports.
+- **Evidence:** Existing provider-neutral architecture, athlete requests for machine identity, and the competition requirement for visible comparability.
+- **Review trigger:** A new material provider, model retirement, validated cross-provider study, official event equipment rule, or administrator catalogue tooling.
+- **Related:** [07_MACHINE_PROVIDERS.md](07_MACHINE_PROVIDERS.md), [06_DATABASE.md](06_DATABASE.md), [08_COMPETITIONS.md](08_COMPETITIONS.md)
+
 ## Decision template
 
 Copy this structure for new records:
