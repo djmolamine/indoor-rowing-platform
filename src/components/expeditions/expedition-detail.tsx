@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, Award, Check, CircleGauge, Flag, MapPin, UsersRo
 import type { ExpeditionDefinition } from "@/lib/expeditions/types";
 import { ExpeditionRouteMap } from "./expedition-route-map";
 import { useExpeditionProgress } from "./use-expedition-progress";
+import { ExpeditionArtwork } from "./expedition-artwork";
 
 function km(meters: number) { return `${(meters / 1000).toLocaleString(undefined, { maximumFractionDigits: 1 })} km`; }
 
@@ -20,7 +21,8 @@ export function ExpeditionDetail({ expedition }: { expedition: ExpeditionDefinit
   return (
     <div>
       <Link href="/expeditions" className="inline-flex min-h-11 items-center gap-2 text-sm font-black text-[#36534a] hover:text-[#0d2b24]"><ArrowLeft size={17} /> All Expeditions</Link>
-      <header className="relative mt-3 overflow-hidden rounded-[2rem] px-5 py-8 text-white surface-grid sm:px-9 sm:py-11" style={{ background: `linear-gradient(125deg, ${expedition.cover.from}, ${expedition.cover.to})` }}>
+      <header className="wake-lines relative mt-3 min-h-[32rem] overflow-hidden rounded-[2rem] px-5 py-9 text-white shadow-[0_30px_90px_rgba(13,43,36,.2)] sm:px-10 sm:py-14">
+        <ExpeditionArtwork slug={expedition.slug}/>
         <div className="relative max-w-3xl"><div className="flex flex-wrap gap-2"><span className="rounded-full border border-white/20 bg-black/15 px-3 py-1 text-[10px] font-black uppercase tracking-[.14em]">{expedition.region}</span><span className="rounded-full border border-white/20 bg-black/15 px-3 py-1 text-[10px] font-black uppercase tracking-[.14em]">{expedition.difficulty}</span>{isActive && <span className="rounded-full bg-[#ff6b35] px-3 py-1 text-[10px] font-black uppercase tracking-[.14em]">Active journey</span>}</div><h1 className="display-type mt-5 text-5xl font-black leading-none sm:text-7xl">{expedition.name}</h1><p className="mt-3 text-lg font-bold text-white/85">{expedition.subtitle}</p><p className="mt-6 max-w-2xl text-sm leading-7 text-white/75">{expedition.introduction}</p><div className="mt-7 flex flex-wrap gap-3">{!isActive && !isComplete && <button type="button" onClick={() => startExpedition(expedition)} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#ff6b35] px-6 text-sm font-black text-white hover:bg-[#f25b28] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Start Expedition <ArrowRight size={17} /></button>}<Link href="/workouts" className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 text-sm font-black text-white hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Log or import a workout</Link></div></div>
       </header>
 
