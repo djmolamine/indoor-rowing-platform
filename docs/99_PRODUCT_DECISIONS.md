@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Founding Principles](00_FOUNDING_PRINCIPLES.md), [Vision](01_VISION.md), [Product Definition](02_PRODUCT.md), [Roadmap](13_ROADMAP.md) |
 
 ## Purpose
@@ -43,6 +43,7 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 | PD-010 | Remain World Rowing compatible, never dependent | Accepted | 2026-07-21 |
 | PD-011 | Learn from Concept2 depth but copy neither design nor architecture | Accepted | 2026-07-21 |
 | PD-012 | Sequence trusted record before public cross-machine competition | Accepted | 2026-07-21 |
+| PD-013 | Use structured geography and a curated club directory | Accepted | 2026-07-22 |
 
 ## PD-001: Universal machine-independent platform
 
@@ -138,6 +139,20 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Rationale:** Competition magnifies data-quality and fairness errors.
 - **Consequences:** Early community uses personal progress, events, challenges, and participation missions before complex ranking claims.
 - **Related:** [13_ROADMAP.md](13_ROADMAP.md)
+
+## PD-013: Structured geography and curated club directory
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Context:** Free-text country, city, and club values create duplicates, impossible combinations, unclear affiliations, and false verification signals in the Athlete Passport.
+- **Decision:** Countries are stored with ISO 3166-1 alpha-2 codes and display names; cities are selected within a country or entered through an explicit manual-locality path. Club membership remains optional. Club discovery uses curated records with source, verification, and active status, and athletes can submit missing clubs for review without creating a verified affiliation automatically.
+- **Rationale:** Structured geography improves internationalization and event eligibility, while a governed directory protects athlete identity and future federation credibility.
+- **Consequences:** Country changes invalidate incompatible cities and club selections. Directory ingestion must preserve provenance and separate source review from federation verification. Independent, home, gym, school, and national-centre athletes remain complete product states.
+- **Alternatives:** Unrestricted free text; an unsourced global club list; requiring club membership; treating athlete submissions as immediately verified.
+- **Evidence:** Athlete Passport identity requirements, optional-club principle, federation-role governance, and MVP progressive-profile rules.
+- **Review trigger:** Introduction of Supabase club records, federation imports, partner data, or administrator verification workflows.
+- **Related:** [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md), [06_DATABASE.md](06_DATABASE.md), [15_WORLD_ROWING.md](15_WORLD_ROWING.md)
 
 ## Decision template
 

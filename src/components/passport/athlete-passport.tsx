@@ -20,7 +20,11 @@ import {
 } from "lucide-react";
 import { PassportSection } from "@/components/passport/passport-section";
 import { VerificationBadge } from "@/components/passport/verification-badge";
-import { passportData, type PassportAthlete, type PassportVisibility } from "@/lib/passport-data";
+import { SearchCombobox, type ComboboxOption } from "@/components/ui/search-combobox";
+import { citiesForCountry } from "@/lib/location-data/cities";
+import { COUNTRIES, getCountry } from "@/lib/location-data/countries";
+import { seedClubsForLocation, SEED_CLUBS } from "@/lib/location-data/seed-clubs";
+import { passportData, type PassportAthlete, type PassportVisibility, type TrainingContext } from "@/lib/passport-data";
 
 const visibilityOptions: { value: PassportVisibility; description: string }[] = [
   { value: "Private", description: "Only you can view your full Passport." },
@@ -30,23 +34,46 @@ const visibilityOptions: { value: PassportVisibility; description: string }[] = 
 ];
 
 const fieldClass = "mt-1.5 min-h-11 w-full rounded-xl border border-[#ccd6d1] bg-white px-3 text-sm font-bold text-[#13211d] outline-none transition focus:border-[#16725e] focus:ring-2 focus:ring-[#16725e]/20";
+const OTHER_CITY = "__other_city__";
+const MISSING_CLUB = "__missing_club__";
+const trainingContexts: TrainingContext[] = ["Home", "Commercial gym", "Rowing club", "School or university", "National training centre", "Other"];
+const countryOptions: ComboboxOption[] = COUNTRIES.map((country) => ({ id: country.code, label: country.name, description: country.code }));
 
 function percentage(value: number, total: number) { return Math.round((value / total) * 100); }
+
+function athleteIdentity(athlete: PassportAthlete) {
+  if (athlete.trainingContext === "Rowing club") {
+    if (athlete.selectedClubId === MISSING_CLUB && athlete.customClub.officialName) return athlete.customClub.officialName;
+    return SEED_CLUBS.find((club) => club.id === athlete.selectedClubId)?.officialName ?? "Club athlete";
+  }
+  return { Home: "Home athlete", "Commercial gym": "Commercial gym athlete", "School or university": "University athlete", "National training centre": "National training centre athlete", Other: "Independent athlete" }[athlete.trainingContext];
+}
 
 export function AthletePassport() {
   const [athlete, setAthlete] = useState<PassportAthlete>(passportData.athlete);
   const [draft, setDraft] = useState<PassportAthlete>(passportData.athlete);
+  const [editorVersion, setEditorVersion] = useState(0);
+  const [formError, setFormError] = useState("");
   const dialogRef = useRef<HTMLDialogElement>(null);
   const expedition = passportData.expeditions.active;
   const expeditionProgress = percentage(expedition.completedKm, expedition.totalKm);
+  const identity = athleteIdentity(athlete);
+  const cityOptions: ComboboxOption[] = [...citiesForCountry(draft.countryCode).map((city) => ({ id: city.name, label: city.name })), { id: OTHER_CITY, label: "Other city", description: "Enter a city or locality manually" }];
+  const availableClubs = seedClubsForLocation(draft.countryCode, draft.city);
+  const clubOptions: ComboboxOption[] = [...availableClubs.map((club) => ({ id: club.id, label: club.officialName, description: `${club.city} · ${club.clubType} · ${club.verificationStatus}` })), { id: MISSING_CLUB, label: "My club is not listed", description: "Submit club details for future review" }];
 
   function openEditor() {
     setDraft(athlete);
+    setFormError("");
+    setEditorVersion((version) => version + 1);
     dialogRef.current?.showModal();
   }
 
   function savePrototypeChanges(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!draft.countryCode || !draft.city) { setFormError("Choose a country and city, or enter an Other city value."); return; }
+    if (draft.trainingContext === "Rowing club" && !draft.selectedClubId) { setFormError("Choose a club or select “My club is not listed.”"); return; }
+    if (draft.trainingContext === "Rowing club" && draft.selectedClubId === MISSING_CLUB && !draft.customClub.officialName.trim()) { setFormError("Enter the club name for review."); return; }
     setAthlete(draft);
     dialogRef.current?.close();
   }
@@ -69,7 +96,7 @@ export function AthletePassport() {
             <div>
               <div className="flex flex-wrap items-center gap-2"><span className="text-xs font-black uppercase tracking-[0.14em] text-[#8eb4a8]">Athlete Passport</span><VerificationBadge label={athlete.verificationStatus} inverse /></div>
               <h1 className="display-type mt-3 text-4xl font-black leading-none sm:text-5xl">{athlete.name}</h1>
-              <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-[#b6cec7]"><span>{athlete.countryCode} · {athlete.country}</span><span>{athlete.clubStatus}</span><span>{athlete.trainingLocation}</span></div>
+              <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-[#b6cec7]"><span>{athlete.countryCode} · {athlete.country}</span><span>{identity}</span><span>{athlete.city}, {athlete.country}</span></div>
               <p className="mt-4 max-w-2xl text-sm leading-6 text-[#a9c1ba]">{athlete.biography}</p>
             </div>
           </div>
@@ -122,7 +149,7 @@ export function AthletePassport() {
 
       <div className="grid gap-5 lg:grid-cols-2">
         <PassportSection id="affiliations" eyebrow="Independent identity" title="Affiliations and equipment" description="Providers contribute records to your Passport; they do not own your identity.">
-          <dl className="mt-6 space-y-4 text-sm"><div className="flex gap-3"><UsersRound size={18} className="mt-0.5 shrink-0 text-[#16725e]" aria-hidden="true" /><div><dt className="text-xs text-[#718078]">Club status</dt><dd className="mt-1 font-black">{athlete.clubStatus}</dd></div></div><div className="flex gap-3"><Building2 size={18} className="mt-0.5 shrink-0 text-[#16725e]" aria-hidden="true" /><div><dt className="text-xs text-[#718078]">National federation</dt><dd className="mt-1 font-black">{passportData.affiliations.federation}</dd></div></div><div className="flex gap-3"><MapPin size={18} className="mt-0.5 shrink-0 text-[#16725e]" aria-hidden="true" /><div><dt className="text-xs text-[#718078]">Primary training location</dt><dd className="mt-1 font-black">{athlete.trainingLocation}</dd></div></div><div className="flex gap-3"><CircleGauge size={18} className="mt-0.5 shrink-0 text-[#16725e]" aria-hidden="true" /><div><dt className="text-xs text-[#718078]">Preferred machine</dt><dd className="mt-1 font-black">{athlete.preferredMachine}</dd></div></div></dl>
+          <dl className="mt-6 space-y-4 text-sm"><div className="flex gap-3"><UsersRound size={18} className="mt-0.5 shrink-0 text-[#16725e]" aria-hidden="true" /><div><dt className="text-xs text-[#718078]">Training context</dt><dd className="mt-1 font-black">{identity}</dd></div></div><div className="flex gap-3"><Building2 size={18} className="mt-0.5 shrink-0 text-[#16725e]" aria-hidden="true" /><div><dt className="text-xs text-[#718078]">National federation</dt><dd className="mt-1 font-black">{passportData.affiliations.federation}</dd></div></div><div className="flex gap-3"><MapPin size={18} className="mt-0.5 shrink-0 text-[#16725e]" aria-hidden="true" /><div><dt className="text-xs text-[#718078]">Primary training location</dt><dd className="mt-1 font-black">{athlete.city}, {athlete.country}</dd></div></div><div className="flex gap-3"><CircleGauge size={18} className="mt-0.5 shrink-0 text-[#16725e]" aria-hidden="true" /><div><dt className="text-xs text-[#718078]">Preferred machine</dt><dd className="mt-1 font-black">{athlete.preferredMachine}</dd></div></div></dl>
           <div className="mt-6 border-t border-[#e7ebe8] pt-5"><p className="text-xs font-bold text-[#718078]">Workout providers represented</p><div className="mt-3 flex flex-wrap gap-2">{passportData.affiliations.providers.map((provider) => <span key={provider} className="rounded-full bg-[#eef3f0] px-3 py-1.5 text-xs font-black text-[#36534a]">{provider}</span>)}</div><p className="mt-5 text-xs font-bold text-[#718078]">Machine classes in history</p><div className="mt-3 flex flex-wrap gap-2">{passportData.affiliations.machineClasses.map((machineClass) => <span key={machineClass} className="rounded-full border border-[#dfe5e1] px-3 py-1.5 text-xs font-bold">{machineClass}</span>)}</div></div>
         </PassportSection>
 
@@ -137,7 +164,47 @@ export function AthletePassport() {
       <dialog ref={dialogRef} aria-labelledby="edit-passport-title" className="m-auto max-h-[90vh] w-[min(42rem,calc(100%-2rem))] overflow-y-auto rounded-3xl border-0 bg-white p-0 text-[#13211d] shadow-2xl backdrop:bg-[#061b16]/70">
         <form onSubmit={savePrototypeChanges} className="p-5 sm:p-7">
           <div className="flex items-start justify-between gap-4"><div><p className="text-xs font-black uppercase tracking-[0.14em] text-[#d94d1c]">Session prototype</p><h2 id="edit-passport-title" className="mt-2 text-2xl font-black">Edit Athlete Passport</h2><p className="mt-2 text-sm leading-6 text-[#718078]">Changes appear immediately after applying but are not saved to a server or retained after refresh.</p></div><button type="button" onClick={() => dialogRef.current?.close()} className="grid size-10 shrink-0 place-items-center rounded-full border border-[#dfe5e1] hover:bg-[#f5f7f4] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16725e]" aria-label="Close Passport editor"><X size={18} aria-hidden="true" /></button></div>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2"><label className="text-xs font-bold text-[#475b54]">Athlete name<input className={fieldClass} value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} /></label><label className="text-xs font-bold text-[#475b54]">Country<input className={fieldClass} value={draft.country} onChange={(event) => setDraft({ ...draft, country: event.target.value })} /></label><label className="text-xs font-bold text-[#475b54]">Training location<input className={fieldClass} value={draft.trainingLocation} onChange={(event) => setDraft({ ...draft, trainingLocation: event.target.value })} /></label><label className="text-xs font-bold text-[#475b54]">Club status<select className={fieldClass} value={draft.clubStatus} onChange={(event) => setDraft({ ...draft, clubStatus: event.target.value })}><option>Independent athlete</option><option>Riyadh Rowing Club</option><option>Commercial gym athlete</option><option>Virtual crew athlete</option></select></label><label className="text-xs font-bold text-[#475b54] sm:col-span-2">Preferred machine<input className={fieldClass} value={draft.preferredMachine} onChange={(event) => setDraft({ ...draft, preferredMachine: event.target.value })} /></label><label className="text-xs font-bold text-[#475b54] sm:col-span-2">Biography<textarea rows={3} className={`${fieldClass} py-3`} value={draft.biography} onChange={(event) => setDraft({ ...draft, biography: event.target.value })} /></label><label className="text-xs font-bold text-[#475b54] sm:col-span-2">Passport visibility<select className={fieldClass} value={draft.visibility} onChange={(event) => setDraft({ ...draft, visibility: event.target.value as PassportVisibility })}>{visibilityOptions.map((option) => <option key={option.value}>{option.value}</option>)}</select></label></div>
+          <div key={editorVersion} className="mt-6 grid gap-4 sm:grid-cols-2">
+            <label className="text-xs font-bold text-[#475b54]">Athlete name<input className={fieldClass} value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} /></label>
+            <SearchCombobox
+              label="Country or territory"
+              value={draft.countryCode}
+              options={countryOptions}
+              placeholder="Search 249 ISO countries"
+              required
+              onChange={(countryCode) => {
+                const country = getCountry(countryCode);
+                setDraft((current) => ({ ...current, countryCode, country: country?.name ?? "", city: "", cityIsOther: false, selectedClubId: "", customClub: { ...current.customClub, countryCode, country: country?.name ?? "", city: "" } }));
+              }}
+            />
+            <div>
+              <SearchCombobox
+                key={`${editorVersion}-${draft.countryCode}`}
+                label="Training city"
+                value={draft.cityIsOther ? OTHER_CITY : draft.city}
+                options={cityOptions}
+                placeholder={draft.countryCode ? "Search cities" : "Choose a country first"}
+                required
+                disabled={!draft.countryCode}
+                onChange={(cityValue) => setDraft((current) => ({ ...current, city: cityValue === OTHER_CITY ? "" : cityValue, cityIsOther: cityValue === OTHER_CITY, selectedClubId: "", customClub: { ...current.customClub, city: cityValue === OTHER_CITY ? "" : cityValue } }))}
+              />
+              {draft.cityIsOther && <label className="mt-3 block text-xs font-bold text-[#475b54]">Other city or locality<input required className={fieldClass} value={draft.city} onChange={(event) => setDraft((current) => ({ ...current, city: event.target.value, customClub: { ...current.customClub, city: event.target.value } }))} /></label>}
+              <p className="mt-2 text-[11px] leading-5 text-[#718078]">Prototype cities are curated by country and are not a complete world city database.</p>
+            </div>
+            <label className="text-xs font-bold text-[#475b54]">Where do you usually row?<select className={fieldClass} value={draft.trainingContext} onChange={(event) => setDraft((current) => ({ ...current, trainingContext: event.target.value as TrainingContext, selectedClubId: event.target.value === "Rowing club" ? current.selectedClubId : "" }))}>{trainingContexts.map((context) => <option key={context}>{context}</option>)}</select><span className="mt-2 block text-[11px] font-normal leading-5 text-[#718078]">Club membership is optional and never required for an Athlete Passport.</span></label>
+
+            {draft.trainingContext === "Rowing club" && <div className="rounded-2xl border border-[#dfe5e1] bg-[#f8faf8] p-4 sm:col-span-2">
+              <SearchCombobox key={`${editorVersion}-${draft.countryCode}-${draft.city}`} label="Rowing club" value={draft.selectedClubId} options={clubOptions} placeholder="Search the local seed directory" required disabled={!draft.countryCode || !draft.city} onChange={(selectedClubId) => setDraft((current) => ({ ...current, selectedClubId }))} />
+              <p className="mt-2 text-[11px] leading-5 text-[#718078]">This is a small, incomplete directory sourced from official club websites. “Source reviewed” does not mean federation verified.</p>
+              {draft.selectedClubId && draft.selectedClubId !== MISSING_CLUB && (() => { const club = SEED_CLUBS.find((item) => item.id === draft.selectedClubId); return club ? <div className="mt-3 rounded-xl bg-white p-3 text-xs"><p className="font-black">{club.officialName}</p><p className="mt-1 text-[#718078]">{club.city} · {club.clubType} · {club.activeStatus}</p><p className="mt-1 text-[#16725e]">{club.verificationStatus} · {club.source.label}</p></div> : null; })()}
+              {draft.selectedClubId === MISSING_CLUB && <fieldset className="mt-4 grid gap-4 border-t border-[#dfe5e1] pt-4 sm:grid-cols-2"><legend className="sr-only">Missing club submission</legend><label className="text-xs font-bold text-[#475b54] sm:col-span-2">Club official name<input required className={fieldClass} value={draft.customClub.officialName} onChange={(event) => setDraft((current) => ({ ...current, customClub: { ...current.customClub, officialName: event.target.value } }))} /></label><label className="text-xs font-bold text-[#475b54]">Country<input readOnly className={`${fieldClass} bg-[#eef3f0]`} value={`${draft.country} (${draft.countryCode})`} /></label><label className="text-xs font-bold text-[#475b54]">City<input readOnly className={`${fieldClass} bg-[#eef3f0]`} value={draft.city} /></label><label className="text-xs font-bold text-[#475b54]">Website <span className="font-normal">(optional)</span><input type="url" className={fieldClass} value={draft.customClub.website} onChange={(event) => setDraft((current) => ({ ...current, customClub: { ...current.customClub, website: event.target.value } }))} /></label><label className="text-xs font-bold text-[#475b54]">Federation <span className="font-normal">(optional)</span><input className={fieldClass} value={draft.customClub.federation} onChange={(event) => setDraft((current) => ({ ...current, customClub: { ...current.customClub, federation: event.target.value } }))} /></label><p className="rounded-xl bg-[#fff7f2] p-3 text-xs leading-5 text-[#6d4a3a] sm:col-span-2">Submitted clubs would enter a review queue. They would not appear as verified until their identity, source, and federation relationship were checked.</p></fieldset>}
+            </div>}
+
+            <label className="text-xs font-bold text-[#475b54] sm:col-span-2">Preferred machine<input className={fieldClass} value={draft.preferredMachine} onChange={(event) => setDraft({ ...draft, preferredMachine: event.target.value })} /></label>
+            <label className="text-xs font-bold text-[#475b54] sm:col-span-2">Biography<textarea rows={3} className={`${fieldClass} py-3`} value={draft.biography} onChange={(event) => setDraft({ ...draft, biography: event.target.value })} /></label>
+            <label className="text-xs font-bold text-[#475b54] sm:col-span-2">Passport visibility<select className={fieldClass} value={draft.visibility} onChange={(event) => setDraft({ ...draft, visibility: event.target.value as PassportVisibility })}>{visibilityOptions.map((option) => <option key={option.value}>{option.value}</option>)}</select></label>
+          </div>
+          {formError && <p role="alert" className="mt-4 rounded-xl bg-[#fff0e9] p-3 text-sm font-bold text-[#9e3718]">{formError}</p>}
           <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end"><button type="button" onClick={() => dialogRef.current?.close()} className="min-h-11 rounded-full border border-[#d5ddd9] px-5 text-sm font-black">Cancel</button><button type="submit" className="min-h-11 rounded-full bg-[#ff6b35] px-5 text-sm font-black text-white hover:bg-[#e95b28] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d2b24]">Apply prototype changes</button></div>
         </form>
       </dialog>

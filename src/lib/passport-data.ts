@@ -1,12 +1,25 @@
 export type PassportVisibility = "Private" | "Connections only" | "Public athlete profile" | "Event organizers";
+export type TrainingContext = "Home" | "Commercial gym" | "Rowing club" | "School or university" | "National training centre" | "Other";
+
+export interface CustomClubDraft {
+  officialName: string;
+  countryCode: string;
+  country: string;
+  city: string;
+  website: string;
+  federation: string;
+}
 
 export interface PassportAthlete {
   name: string;
   initials: string;
   country: string;
   countryCode: string;
-  trainingLocation: string;
-  clubStatus: string;
+  city: string;
+  cityIsOther: boolean;
+  trainingContext: TrainingContext;
+  selectedClubId: string;
+  customClub: CustomClubDraft;
   memberSince: string;
   currentSeason: string;
   passportId: string;
@@ -86,11 +99,8 @@ export interface PassportData {
   competitions: CompetitionRecord[];
   achievements: Achievement[];
   affiliations: {
-    club: string;
     federation: string;
-    trainingLocation: string;
     providers: string[];
-    preferredMachine: string;
     machineClasses: string[];
   };
 }
@@ -101,8 +111,11 @@ export const passportData: PassportData = {
     initials: "MD",
     country: "Algeria",
     countryCode: "DZ",
-    trainingLocation: "Riyadh, Saudi Arabia",
-    clubStatus: "Independent athlete",
+    city: "Algiers",
+    cityIsOther: false,
+    trainingContext: "Home",
+    selectedClubId: "",
+    customClub: { officialName: "", countryCode: "DZ", country: "Algeria", city: "Algiers", website: "", federation: "" },
     memberSince: "21 July 2025",
     currentSeason: "2026 season",
     passportId: "RF-DZ-MD-7K2P",
@@ -162,11 +175,8 @@ export const passportData: PassportData = {
     { id: "a7", type: "Lifetime", title: "One million meters", detail: "Passed 1,000 km of athlete-owned indoor rowing history.", earnedOn: "April 2026" },
   ],
   affiliations: {
-    club: "Independent athlete",
     federation: "No federation relationship declared",
-    trainingLocation: "Riyadh, Saudi Arabia",
     providers: ["Concept2", "RP3", "Manual entry", "Photo-confirmed"],
-    preferredMachine: "Concept2 RowErg",
     machineClasses: ["Standard flywheel", "Dynamic", "Water resistance"],
   },
 };

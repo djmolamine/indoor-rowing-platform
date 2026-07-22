@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Founding Principles](00_FOUNDING_PRINCIPLES.md), [Athlete Journey](03_ATHLETE_JOURNEY.md), [Database Foundation](06_DATABASE.md), [Authentication](authentication.md) |
 
 ## Definition
@@ -113,6 +113,10 @@ The athlete sees the fields, recipient, purpose, duration, and revocation behavi
 ## Affiliations
 
 Club membership is optional. Club, team, coach, gym, and federation are separate relationship types with effective dates and roles. Athletes may have multiple relationships unless a particular competition rule limits representation. Changing affiliation does not rewrite historical results.
+
+Country and territory references use ISO 3166-1 alpha-2 codes alongside localized display names. City selection is country-dependent and must clear or revalidate when the country changes; a reviewed manual locality path remains available because no practical prototype list can contain every city.
+
+The global club directory is curated rather than open text presented as fact. Club records retain official name, country code, city, club type, website, federation affiliation where known, verification status, source, and active status. Athletes who row at home, in a commercial gym, at a school or university, at a national training centre, or elsewhere do not need a club relationship. If a real club is missing, an athlete may submit its details for review, but the submission remains unverified until an authorized review or federation-backed source confirms it.
 
 ## Minors and delegated access
 
