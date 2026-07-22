@@ -13,6 +13,8 @@
 
 Events exist to connect athletes with organized indoor-rowing participation: from an informal club race to a federation championship or authorized international competition. They give organizers a structured way to publish authoritative information, define eligibility and machine rules, receive or reference entries, verify results, resolve corrections, and publish outcomes. They give athletes one place to discover opportunities, understand what is required, compete with informed consent, and carry trusted achievements into a lifelong Athlete Passport.
 
+Events are also a commercial platform pillar. Rowform intends to support the complete path from discovery and promotion through registration, payment, competition operations, verified results, Rankings, and Athlete Passport history. Revenue may come from configurable athlete-paid service fees, organizer-funded platform fees, premium organizer tools, disclosed promotion and sponsorship, and federation or championship licensing. Commercial value never permits false official status, hidden fees, disguised promotion, or ownership of unrelated athlete data.
+
 Events connect four existing Rowform systems without replacing any of them:
 
 - The **Athlete Passport** supplies athlete-approved identity, eligibility, affiliation, and verified claims.
@@ -331,14 +333,30 @@ The architecture reserves these capabilities without including them in the curre
 
 These capabilities extend the same Event, Competition, Entry, Result, evidence, role, consent, and audit boundaries. They must not be implemented as isolated systems that duplicate athlete, workout, or ranking truth.
 
+## Commerce and Payment Architecture
+
+An Event declares one commerce mode: `external_registration`, `rowform_registration`, `information_only`, or `invite_only`. The mode controls every registration call to action. External Events link to the identified organizer and never enter a native Rowform checkout. Native registration is available only for an organizer-managed Event with verified ownership, accepted commercial terms, and operational support.
+
+Fee configuration is versioned per Event and may be organizer-funded, athlete-paid, percentage, fixed, hybrid, waived, discounted, coupon-based, or subsidized. Before confirmation, the athlete sees entry fee, Rowform service fee, estimated tax, discount, and total in the Event currency. There is no universal fee: final pricing depends on organizer agreements, payment processing costs, taxes, refunds, chargeback exposure, and local regulation.
+
+Production payment uses a compliant hosted checkout provider. Rowform stores provider and checkout references, amounts, currency, payment/payout/refund/dispute states, and timestamps, but never card details. Provider IDs remain data rather than domain taxonomy so a compliant payment service can be replaced. Organizer payout, refunds, chargebacks, reconciliation, tax reporting, and payment webhooks require dedicated later implementation and financial controls.
+
+## Organizer Ownership and Promotion
+
+Organizer records separate identity verification, organization verification, federation authority, Event ownership, authorized administrators, payout readiness, and commercial agreement status. Event ownership progresses from unclaimed public listing to claimed, verified organizer-owned, or Rowform-managed. Claiming never grants an official badge automatically.
+
+Promotion may include featured, sponsored, promoted-search, homepage, newsletter, regional, or club-targeted placement. Every paid placement stores its campaign, period, targeting scope, and disclosure label. `Featured`, `Sponsored`, or `Promoted` remains visible wherever the placement affects discovery; payment never changes organic eligibility or result ranking.
+
 ## MVP Scope
 
-The Events MVP is intentionally a trusted discovery layer delivered only after the trusted personal-record foundation is ready. It includes:
+The Events MVP is a trusted discovery and commercial-path prototype delivered without live financial processing. It includes:
 
 - A curated public Event directory with physical, virtual, and hybrid Events.
 - Event detail pages containing organizer identity, official-status label, place/time/time zone, registration window, races, eligibility summary, machine rules, verification requirement, accessibility information, and source links.
 - Country, date, format, registration-status, machine-class, and Event-type filters using structured data.
 - External registration handoff with clear ownership and data-sharing disclosure.
+- Native prototype registration for explicitly Rowform-managed Events, including Passport reuse, race/category selection, machine acknowledgement, versioned acceptances, fee breakdown, review, and a clearly unpaid confirmation state.
+- Typed provider-neutral payment, fee, discount, payout, refund, organizer, ownership, promotion, registration, and result records ready for persistence.
 - Versioned Event and race definitions sufficient to render accurate information.
 - Organizer/source provenance and an administrator-reviewed publication workflow.
 - Accessible empty, postponed, cancelled, registration-closed, and outdated-information states.
@@ -346,7 +364,7 @@ The Events MVP is intentionally a trusted discovery layer delivered only after t
 
 The Events MVP excludes:
 
-- On-platform registration, payments, refunds, qualification, and entry management.
+- Live hosted checkout, card processing, payment success claims, organizer payouts, refunds, chargebacks, qualification decisions, and persistent entry operations.
 - Live timing, check-in, lane assignment, live leaderboards, spectator mode, and livestreams.
 - Athlete result submission, organizer result upload, verification queues, protests, appeals, and official result publication.
 - Automatic ranking or Athlete Passport updates from Events.
@@ -354,7 +372,7 @@ The Events MVP excludes:
 - Personalized targeting that requires optional profile data.
 - Official federation or World Rowing branding without formal authorization.
 
-The next release should add saved Events, consented reminders, and registration status before result operations. Structured results and organizer verification follow only after canonical workouts, Passport privacy, ranking rules, organization roles, audit, and competition-integrity controls are proven. This sequencing follows [13_ROADMAP.md](13_ROADMAP.md), [17_MVP_BUILD_PLAN.md](17_MVP_BUILD_PLAN.md), and [18_ROADMAP.md](18_ROADMAP.md).
+The next release should persist saved Events and registrations, add consented reminders, and integrate compliant hosted checkout with verified organizer ownership before accepting money. Structured organizer result operations follow only after canonical workouts, Passport privacy, ranking rules, organization roles, audit, and competition-integrity controls are proven. This sequencing follows [13_ROADMAP.md](13_ROADMAP.md), [17_MVP_BUILD_PLAN.md](17_MVP_BUILD_PLAN.md), and [18_ROADMAP.md](18_ROADMAP.md).
 
 ## Architectural Guardrails
 

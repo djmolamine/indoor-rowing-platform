@@ -41,6 +41,10 @@ Do not put privileged profile initialization in browser code.
 
 Optional Athlete Passport fields, notification preferences, provider permissions, and event-specific consents are collected later through value-led flows. They must not be bundled into account creation.
 
+Event registration reuses the authenticated athlete and scoped Athlete Passport claims instead of asking the athlete to recreate identity. The athlete approves the exact fields presented to the Event. Emergency contact, waiver, eligibility, and payment information are collected only when the selected Event requires them. An external-registration handoff does not share Passport data silently.
+
+Native Event checkout requires an authenticated session, recent authorization for sensitive changes, a server-created registration draft, and a hosted payment session. The payment provider returns through allow-listed server routes; a signed webhook, not a browser redirect, establishes paid status. Organizer administration requires separate scoped organization roles and cannot be inferred from athlete authentication or an email domain.
+
 ## Request/session flow
 
 - A lightweight root middleware refreshes expiring auth cookies. It should not perform application authorization.

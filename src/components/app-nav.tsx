@@ -11,7 +11,7 @@ const items = [
   { label: "Rankings", href: "/leaderboard", icon: Medal },
   { label: "Community", href: "/dashboard#community", icon: UsersRound },
   { label: "Expeditions", href: "/expeditions", icon: Route },
-  { label: "Events", href: "/dashboard#event", icon: CalendarDays },
+  { label: "Events", href: "/events", icon: CalendarDays },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 

@@ -1,0 +1,2 @@
+import { OrganizerFoundation } from "@/components/events/organizer-foundation";
+export default async function OrganizerPaymentsPage({params}:{params:Promise<{id:string}>}){const {id}=await params;return <OrganizerFoundation title="Payment operations" detail={`Reserved fee, payout, refund, dispute, and reconciliation surface for Event ${id}. Live financial operations require a compliant hosted payment provider.`}/>}

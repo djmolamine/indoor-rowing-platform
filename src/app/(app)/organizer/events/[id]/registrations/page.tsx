@@ -1,0 +1,2 @@
+import { OrganizerFoundation } from "@/components/events/organizer-foundation";
+export default async function OrganizerRegistrationsPage({params}:{params:Promise<{id:string}>}){const {id}=await params;return <OrganizerFoundation title="Registration operations" detail={`Reserved entry, waiver, capacity, eligibility, and transfer surface for Event ${id}. No athlete registration data is exposed in this prototype.`}/>}

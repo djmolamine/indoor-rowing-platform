@@ -49,6 +49,9 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 | PD-016 | Use maintained city data with a manual fallback | Accepted | 2026-07-22 |
 | PD-017 | Establish explicit geographic ranking scopes | Accepted | 2026-07-22 |
 | PD-018 | Defer coordinated Visual System V2 until foundations stabilize | Accepted | 2026-07-22 |
+| PD-019 | Use event-configurable competition and ranking taxonomy | Accepted | 2026-07-22 |
+| PD-020 | Maintain a curated machine provider and model catalogue | Accepted | 2026-07-22 |
+| PD-021 | Establish Events as a commercial platform pillar | Accepted | 2026-07-22 |
 
 ## PD-001: Universal machine-independent platform
 
@@ -240,6 +243,20 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Evidence:** Existing provider-neutral architecture, athlete requests for machine identity, and the competition requirement for visible comparability.
 - **Review trigger:** A new material provider, model retirement, validated cross-provider study, official event equipment rule, or administrator catalogue tooling.
 - **Related:** [07_MACHINE_PROVIDERS.md](07_MACHINE_PROVIDERS.md), [06_DATABASE.md](06_DATABASE.md), [08_COMPETITIONS.md](08_COMPETITIONS.md)
+
+## PD-021: Events as a commercial platform pillar
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Context:** An Event results catalogue alone cannot deliver the athlete journey, organizer operations, or sustainable commercial model required for Rowform to become indoor rowing infrastructure.
+- **Decision:** Events supports discovery, disclosed promotion, eligibility, registration, payment, competition operations, verified results, Rankings, and Athlete Passport history. Events declare `external_registration`, `rowform_registration`, `information_only`, or `invite_only`. Rowform may charge configurable athlete service fees, organizer platform fees, premium-tool fees, promotion/sponsorship fees, and federation or championship licensing.
+- **Rationale:** Owning a trustworthy transaction and operations path creates more athlete value, better organizer infrastructure, and a credible revenue model while allowing external Events to remain discoverable.
+- **Consequences:** Fees must be transparent and configurable. Native payment uses compliant hosted checkout and stores no card details. Organizer ownership, payouts, refunds, chargebacks, tax, and reconciliation require dedicated future systems. Paid placement is visibly disclosed and never changes competitive ranking. External Events never appear to use Rowform payment. Official affiliation is displayed only from explicit verified partner data.
+- **Alternatives:** Remain an information-only calendar; process every external Event as native; hardcode one fee or payment provider; disguise promotion as organic discovery.
+- **Evidence:** Commercial Event architecture, athlete and organizer journeys, and the revenue principles in [12_BUSINESS_MODEL.md](12_BUSINESS_MODEL.md).
+- **Review trigger:** Selection of a live payment provider, first organizer commercial agreement, first paid registration, or launch in a jurisdiction requiring different marketplace, tax, refund, or safeguarding controls.
+- **Related:** [19_EVENTS_ARCHITECTURE.md](19_EVENTS_ARCHITECTURE.md), [06_DATABASE.md](06_DATABASE.md), [08_COMPETITIONS.md](08_COMPETITIONS.md), [18_ROADMAP.md](18_ROADMAP.md)
 
 ## Decision template
 

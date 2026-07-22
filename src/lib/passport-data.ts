@@ -56,6 +56,8 @@ export interface TimelineEntry {
   title: string;
   detail: string;
   kind: "identity" | "verified" | "performance" | "competition" | "expedition" | "ranking" | "community";
+  eventResultId?: string;
+  registrationId?: string;
 }
 
 export interface ActiveExpedition {
@@ -85,6 +87,11 @@ export interface CompetitionRecord {
   machineClass: string;
   verification: string;
   placing: string;
+  eventId?: string;
+  raceId?: string;
+  eventResultId?: string;
+  registrationId?: string;
+  rankingRecordId?: string;
 }
 
 export interface Achievement {
@@ -154,7 +161,7 @@ export const passportData: PassportData = {
     { id: "t1", date: "18 July 2026", title: "Set a verified 5,000 m personal best", detail: "20:41.6 · 8.2 seconds faster", kind: "performance" },
     { id: "t2", date: "12 July 2026", title: "Reached Algeria’s top 50 for 2,000 m", detail: "Rank 34 · Men 30–39 · verified standard class", kind: "ranking" },
     { id: "t3", date: "2 July 2026", title: "Completed the Thames Expedition", detail: "346 km · Source to Tideway certificate issued", kind: "expedition" },
-    { id: "t4", date: "20 June 2026", title: "Finished the Mediterranean Virtual Open", detail: "2,000 m · 18th of 146 · organizer-verified", kind: "competition" },
+    { id: "t4", date: "20 June 2026", title: "Finished the Mediterranean Virtual Open", detail: "2,000 m · 7:18.7 · 18th of 146 · organizer-verified", kind: "competition", eventResultId:"result-mvo-md-001", registrationId:"registration-mvo-md-001" },
     { id: "t5", date: "3 May 2026", title: "Crew passed its first 1,000 km", detail: "Riyadh Rowers · 42.6 km personal contribution", kind: "community" },
     { id: "t6", date: "19 March 2026", title: "Completed the Seine Expedition", detail: "777 km · Burgundy to the Channel", kind: "expedition" },
     { id: "t7", date: "8 January 2026", title: "Recorded first verified workout", detail: "Provider-signed · canonical record established", kind: "verified" },
@@ -168,7 +175,7 @@ export const passportData: PassportData = {
     ],
   },
   competitions: [
-    { id: "c1", event: "Mediterranean Virtual Open", date: "20 June 2026", format: "2,000 m time trial", result: "7:18.7", category: "Men 30–39 · Open weight", machineClass: "Verified standard class", verification: "Tier 4 · Organizer-verified", placing: "18th of 146 · Top 13%" },
+    { id: "c1", event: "Mediterranean Virtual Open", date: "20 June 2026", format: "2,000 m time trial", result: "7:18.7", category: "Men 30–39 · Open weight", machineClass: "Concept2 static air-resistance class", verification: "Tier 4 · Organizer-verified", placing: "18th of 146 · Top 13%", eventId:"event-mvo-2026", raceId:"race-mvo-2k", eventResultId:"result-mvo-md-001", registrationId:"registration-mvo-md-001", rankingRecordId:"rank-mvo-2026-md" },
     { id: "c2", event: "Algeria Indoor Series · Round 2", date: "11 April 2026", format: "1,000 m sprint", result: "3:31.5", category: "Senior open", machineClass: "Concept2 RowErg", verification: "Tier 2 · Provider-signed", placing: "7th of 58 · Top 12%" },
     { id: "c3", event: "Global 30-Minute Challenge", date: "8 February 2026", format: "30-minute distance", result: "7,128 m", category: "Men 30–39 · Independent", machineClass: "RP3 dynamic class", verification: "Tier 2 · Trusted import", placing: "64th percentile" },
   ],

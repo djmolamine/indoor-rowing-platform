@@ -57,6 +57,7 @@ These milestones are complete as repository foundations or reviewable prototypes
 - [x] Added complete ISO country selection, country-dependent city search with manual fallback, and an incomplete sourced seed-club directory.
 - [x] Defined a curated machine-provider and model catalogue with aliases, machine classes, capabilities, and explicit unknown/other states.
 - [x] Defined competition formats, divisions, age bands, geographic scopes, verification tiers, and official-status taxonomy without hardcoding a governing body.
+- [x] Built a commercially oriented Events prototype with marketplace discovery, Event detail, commerce-mode routing, transparent registration review, confirmation, and provider-neutral payment types.
 - [x] Added Supabase SSR authentication and profile-persistence foundations, including migration files and row-level security policies.
 - [x] Approved the product, business, data, competition, community, World Rowing compatibility, Expedition, and MVP execution documentation.
 
@@ -88,7 +89,7 @@ Priorities follow the trusted-record-first sequence in the [MVP Build Plan](17_M
 
 ### Medium Priority
 
-- [ ] Build structured event discovery and event detail pages with organizer identity, eligibility, accepted machines, deadlines, and registration handoff.
+- [ ] Replace the Event marketplace prototype with persisted organizer-owned listings, authenticated registrations, hosted checkout, payment webhooks, and audited lifecycle operations.
 - [ ] Connect Expedition progress to eligible canonical workouts, contribution reversal, milestones, completion certificates, and one simple crew mode.
 - [ ] Add purposeful community relationships, encouragement, block, mute, report, and moderation without an infinite feed or unrestricted messaging.
 - [ ] Implement the in-app inbox, category/channel preferences, consent records, quiet hours, and optional push notifications.

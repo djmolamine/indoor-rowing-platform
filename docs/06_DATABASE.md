@@ -164,6 +164,20 @@ Core entities:
 
 Registration may be external. Store the handoff and athlete intent without copying unnecessary registration data. See [08_COMPETITIONS.md](08_COMPETITIONS.md).
 
+### Event commerce entities
+
+The commercial Event domain uses stable internal IDs and explicit relationships:
+
+- `Organizer` and `OrganizerUser` hold verified organization identity, scoped administrators, billing readiness, payout readiness, commercial agreement, federation affiliation, and Event ownership.
+- `Event`, `EventSource`, and `EventPromotion` hold lifecycle, commerce mode, provenance, ownership, paid-placement disclosure, and targeting metadata.
+- `Race` holds versioned format, eligibility, machine, verification, scoring, capacity, ranking, and medal rules.
+- `Registration` and `RegistrationEntry` connect athlete, Passport presentation, Event, race, categories, affiliation, acceptances, payment, and later result.
+- `Payment`, `Fee`, `Discount`, `Payout`, and `Refund` preserve provider references, currency and minor-unit amounts, transparent fee allocation, status, disputes, and timestamps. Card details never enter Rowform storage.
+- `EventResult` connects race, registration, athlete, canonical workout where available, verification decision, ranking definition, and Passport claim.
+- `EventNotice`, `Waiver`, and `AthleteWaiverAcceptance` preserve versioned communication and acceptance evidence.
+
+External registration creates no native payment or confirmed Entry unless an organizer-authorized reconciliation import explicitly does so. Native payments use hosted checkout; webhooks update idempotent payment state and never trust browser success alone. See [19_EVENTS_ARCHITECTURE.md](19_EVENTS_ARCHITECTURE.md).
+
 ## Community and missions
 
 Keep long-lived organization membership separate from temporary challenge teams. Core concepts include training relationship, follow, club membership, team membership, challenge participation, River Expedition, crew, milestone, contribution, encouragement, moderation report, and block.
