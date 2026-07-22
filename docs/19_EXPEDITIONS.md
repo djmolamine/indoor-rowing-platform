@@ -6,7 +6,7 @@
 | **Version** | 1.0 |
 | **Status** | Approved |
 | **Owner** | Founders |
-| **Last Reviewed** | 2026-07-21 |
+| **Last Reviewed** | 2026-07-22 |
 | **Related Documents** | [Founding Principles](00_FOUNDING_PRINCIPLES.md), [Vision](01_VISION.md), [Product Definition](02_PRODUCT.md), [Athlete Journey](03_ATHLETE_JOURNEY.md), [Database Foundation](06_DATABASE.md), [Machine Providers](07_MACHINE_PROVIDERS.md), [Athlete Passport](09_ATHLETE_PASSPORT.md), [Community](10_COMMUNITY.md), [Notifications](11_NOTIFICATIONS.md), [Metrics](16_METRICS.md), [MVP Build Plan](17_MVP_BUILD_PLAN.md) |
 
 ## Vision
@@ -91,8 +91,8 @@ The initial view should answer: “Where am I?”, “What did my last row chang
 |---|---:|---|
 | Accessible | Up to 500 km | A first journey or focused seasonal goal |
 | Moderate | 501–1,500 km | A sustained journey across several months |
-| Ambitious | 1,501–3,500 km | A long-form commitment with many stages |
-| Legendary | More than 3,500 km | A multi-season or multi-year flagship journey |
+| Endurance | 1,501–3,500 km | A long-form commitment with many stages |
+| Epic | More than 3,500 km | A multi-season or multi-year flagship journey |
 
 Completion estimates use the athlete's chosen weekly target when available. Otherwise Rowform shows neutral scenarios—for example, 25 km, 50 km, and 100 km per week—rather than predicting from sensitive profile data. Estimates update gently and never describe an athlete as “behind.”
 
@@ -102,7 +102,7 @@ Completion estimates use the athlete's chosen weekly target when available. Othe
 
 An athlete can preview the full route theme, total distance, rules, privacy choices, expected content cadence, and reward terms before joining. Joining creates an Expedition participation record and asks separately whether the athlete wants milestone notifications, a crew, public contribution display, or certificate display. All optional choices default off unless an earlier purpose-specific preference applies.
 
-Athletes may undertake one or more Expeditions concurrently. Before enabling many simultaneous journeys, Rowform should study whether automatic contribution creates confusion. The default product recommendation is one active primary Expedition, with explicit selection of any secondary journey.
+The MVP allows one active individual Expedition at a time. Starting another requires explicit switch confirmation. Existing progress is preserved, but only future eligible workouts advance the newly active journey; old workouts are not applied retroactively. Multi-Expedition participation may be reconsidered only through a recorded product decision after contribution routing is proven understandable.
 
 ### Eligible Distance
 
@@ -247,34 +247,32 @@ Community interactions are deliberately narrow:
 
 There is no Expedition-wide infinite feed, unrestricted direct messaging, public location tracking, or default individual distance leaderboard. Clubs, gyms, and federations may organize crews, but independent athletes retain equal access to the journey.
 
-## Expedition Catalogue
+## Curated Launch Catalogue
 
-The catalogue below is a product proposal, not a final geographic dataset. Distances are rounded planning estimates for a source-to-mouth or named main-stem journey and can differ by measurement method, channel, season, and route definition. Before publication, each route requires geospatial validation, local cultural review, rights clearance, safety review, and a versioned source record. The digital route is a narrative progression and must not be presented as navigation guidance.
+The launch collection contains exactly eight complete journeys. Distances are curated narrative-route values and can differ from other source-to-mouth measurements because channels, source definitions, and measurement methods vary. Each digital route is a stylized progression, never navigation guidance.
 
-| Expedition | Proposed distance | Why it is interesting | Difficulty | Theme |
-|---|---:|---|---|---|
-| Nile — Source of Civilizations | ~6,650 km | A multi-region journey through East and North Africa connecting living river cultures, ancient kingdoms, wetlands, cities, and the Mediterranean delta. | Legendary | Civilization, archaeology, water stewardship |
-| Danube — The River of Europe | ~2,850 km | Travels from the Black Forest to the Black Sea through an exceptionally international basin, historic capitals, rowing cities, and a vast delta. | Ambitious | Borders, European history, shared water |
-| Mississippi — The Great River Road | ~3,780 km | Follows North America's great central waterway from Lake Itasca through Indigenous homelands, industrial cities, wetlands, and the delta. | Legendary | Migration, music, commerce, ecology |
-| Amazon — River of Life | ~6,400 km | Crosses the world's largest river system by discharge and introduces rainforest biodiversity, Indigenous knowledge, tributary scale, and conservation pressures. | Legendary | Biodiversity, climate, living cultures |
-| Thames — Source to Tideway | ~346 km | A compact first Expedition linking rural England, Oxford rowing heritage, historic settlements, and central London. | Accessible | Rowing heritage, cities, tidal river |
-| Rhine — Alps to North Sea | ~1,230 km | Connects Alpine headwaters, border landscapes, castles, industrial corridors, major European cities, and the delta. | Moderate | Trade, landscape, European connection |
-| Seine — Burgundy to the Channel | ~777 km | Moves through rural France and Paris toward Normandy, combining art, architecture, river engineering, and tidal landscapes. | Moderate | Art, cities, cultural memory |
-| Yangtze — Long River | ~6,300 km | Spans highland source regions, dramatic gorges, major cities, engineering landmarks, agriculture, and an immense estuary. | Legendary | Scale, transformation, ecology |
-| Mekong — Six Countries, One River | ~4,350 km | Follows a transboundary river through highlands, cities, fisheries, floodplains, and one of the world's great deltas. | Legendary | Food systems, borders, river communities |
-| Murray — Australia's Inland Lifeline | ~2,510 km | Connects mountain headwaters, agricultural regions, wetlands, Aboriginal cultural landscapes, and the Southern Ocean system. | Ambitious | Dry-land river, culture, conservation |
-| Volga — Heart of Russia | ~3,530 km | Journeys through historic cities, reservoirs, forests, steppe, and the Caspian basin along Europe's longest river. | Legendary | Cities, engineering, continental history |
-| St. Lawrence — Great Lakes Gateway | ~1,200 km | Links the Great Lakes to the Atlantic through islands, bilingual cities, major shipping infrastructure, and marine transition zones. | Moderate | Navigation, exchange, freshwater to ocean |
-| Loire — The Wild River | ~1,010 km | Passes volcanic uplands, historic towns, celebrated châteaux landscapes, vineyards, wetlands, and the Atlantic estuary. | Moderate | Architecture, landscape, free-flowing river |
-| Hudson — Mountains to Harbor | ~510 km | Runs from Adirondack landscapes to New York Harbor through tidal ecology, Indigenous and industrial history, and rowing communities. | Moderate | Estuary, restoration, metropolitan river |
-| Po — Across Northern Italy | ~650 km | Crosses the Po Valley from the Alps to the Adriatic, revealing agriculture, historic cities, flood management, and delta wetlands. | Moderate | Food, engineering, delta ecology |
-| Douro — Mountains, Vineyards, Atlantic | ~900 km | Crosses Spain and Portugal through dramatic valleys, terraced vineyards, historic river trade, and Porto's rowing traditions. | Moderate | Landscape, agriculture, cultural exchange |
-| Elbe — Bohemia to the North Sea | ~1,090 km | Links Czech headwaters, Dresden, restored floodplains, Hamburg, and the tidal North Sea corridor. | Moderate | Resilience, architecture, working river |
-| Ganges — River of Life and Faith | ~2,525 km | Traverses Himalayan origins, major cities, fertile plains, sacred landscapes, biodiversity, and the delta system. | Ambitious | Faith, living culture, environmental responsibility |
-| Zambezi — Highlands to the Indian Ocean | ~2,575 km | Connects southern African landscapes, river communities, major wetlands, and Victoria Falls while exploring power and conservation. | Ambitious | Waterfalls, wildlife, shared resources |
-| Paraná — Continental Current | ~4,880 km | Travels through Brazil, Paraguay, and Argentina across wetlands, major cities, power infrastructure, and the Río de la Plata system. | Legendary | Wetlands, energy, South American connection |
+| Expedition | Distance | Difficulty | Distinctive theme |
+|---|---:|---|---|
+| The Nile | 6,650 km | Epic | Civilizations carried by water |
+| The Danube | 2,850 km | Endurance | Ten countries sharing one current |
+| The Rhine | 1,230 km | Moderate | Alpine source to industrial artery |
+| The Thames | 346 km | Accessible | The home water of modern rowing |
+| The Mississippi | 3,730 km | Endurance | A continental gathering river |
+| The Amazon | 6,400 km | Epic | Water, forest, and planetary scale |
+| The Mekong | 4,350 km | Epic | Six countries and a living flood pulse |
+| The Murray | 2,508 km | Endurance | An inland river sustaining a dry continent |
 
-The launch catalogue should balance continents, languages, route lengths, themes, and completion commitments. Rowform should not release twenty shallow journeys at once. It should establish quality with one flagship Expedition, validate athlete learning and retention, then expand through a controlled editorial pipeline.
+Every launch definition is typed structured data with a unique slug, narrative identity, status, cover treatment, ordered checkpoints, community statistics, completion reward, and certificate title. Every checkpoint contains a unique ID, country, cumulative distance, coordinates where known, story, contextual note, type, and optional achievement. Automated validation rejects duplicate slugs or checkpoint IDs, non-sequential or out-of-range distances, missing start or finish checkpoints, invalid statuses, and empty narrative fields.
+
+### Cinematic Route-Map Standard
+
+The primary detail view uses a restrained dark route canvas, coordinate-grid texture, curved route geometry, connected checkpoint markers, completed and remaining route segments, athlete-position marker, and a selected-checkpoint story panel. Current position receives a subtle reduced-motion-aware emphasis. Desktop presents route and story together; mobile preserves the route through horizontal progression and large tap targets. Every checkpoint is keyboard selectable and every visual route has a complete ordered text timeline.
+
+Prototype geometry may use a curated SVG generated from checkpoint order and coordinates. It must be labeled as a stylized, non-navigation-grade representation and must never resemble fake satellite imagery. A future licensed mapping layer can replace the renderer without changing the Expedition or checkpoint contracts.
+
+### Adding Future Expeditions
+
+Future catalogue entries are added through the same structured definition and validation pipeline, then pass geographic, cultural, editorial, accessibility, rights, and route-distance review. React pages do not contain route catalogues, and new journeys do not require new page implementations. Publication occurs only after the shared dynamic route renders the complete definition and all validation checks pass.
 
 ## Content and Cultural Standards
 

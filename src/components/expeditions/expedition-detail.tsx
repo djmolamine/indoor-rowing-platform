@@ -1,0 +1,41 @@
+"use client";
+
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, Award, Check, CircleGauge, Flag, MapPin, UsersRound } from "lucide-react";
+import type { ExpeditionDefinition } from "@/lib/expeditions/types";
+import { ExpeditionRouteMap } from "./expedition-route-map";
+import { useExpeditionProgress } from "./use-expedition-progress";
+
+function km(meters: number) { return `${(meters / 1000).toLocaleString(undefined, { maximumFractionDigits: 1 })} km`; }
+
+export function ExpeditionDetail({ expedition }: { expedition: ExpeditionDefinition }) {
+  const { progress, startExpedition } = useExpeditionProgress();
+  const completedMeters = progress.distanceBySlug[expedition.slug] ?? 0;
+  const isActive = progress.activeSlug === expedition.slug;
+  const isComplete = completedMeters >= expedition.totalDistanceMeters;
+  const reached = [...expedition.checkpoints].reverse().find((checkpoint) => checkpoint.distanceMeters <= completedMeters) ?? expedition.checkpoints[0];
+  const next = expedition.checkpoints.find((checkpoint) => checkpoint.distanceMeters > completedMeters);
+  const recentContributions = isActive ? progress.contributions : [];
+
+  return (
+    <div>
+      <Link href="/expeditions" className="inline-flex min-h-11 items-center gap-2 text-sm font-black text-[#36534a] hover:text-[#0d2b24]"><ArrowLeft size={17} /> All Expeditions</Link>
+      <header className="relative mt-3 overflow-hidden rounded-[2rem] px-5 py-8 text-white surface-grid sm:px-9 sm:py-11" style={{ background: `linear-gradient(125deg, ${expedition.cover.from}, ${expedition.cover.to})` }}>
+        <div className="relative max-w-3xl"><div className="flex flex-wrap gap-2"><span className="rounded-full border border-white/20 bg-black/15 px-3 py-1 text-[10px] font-black uppercase tracking-[.14em]">{expedition.region}</span><span className="rounded-full border border-white/20 bg-black/15 px-3 py-1 text-[10px] font-black uppercase tracking-[.14em]">{expedition.difficulty}</span>{isActive && <span className="rounded-full bg-[#ff6b35] px-3 py-1 text-[10px] font-black uppercase tracking-[.14em]">Active journey</span>}</div><h1 className="display-type mt-5 text-5xl font-black leading-none sm:text-7xl">{expedition.name}</h1><p className="mt-3 text-lg font-bold text-white/85">{expedition.subtitle}</p><p className="mt-6 max-w-2xl text-sm leading-7 text-white/75">{expedition.introduction}</p><div className="mt-7 flex flex-wrap gap-3">{!isActive && !isComplete && <button type="button" onClick={() => startExpedition(expedition)} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#ff6b35] px-6 text-sm font-black text-white hover:bg-[#f25b28] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Start Expedition <ArrowRight size={17} /></button>}<Link href="/workouts" className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 text-sm font-black text-white hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Log or import a workout</Link></div></div>
+      </header>
+
+      <section className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label="Journey facts"><article className="rounded-2xl border border-[#dfe5e1] bg-white p-4"><MapPin size={18} className="text-[#16725e]" /><p className="mt-3 text-xs text-[#718078]">Start → finish</p><p className="mt-1 text-sm font-black">{expedition.startLocation} → {expedition.finishLocation}</p></article><article className="rounded-2xl border border-[#dfe5e1] bg-white p-4"><CircleGauge size={18} className="text-[#16725e]" /><p className="mt-3 text-xs text-[#718078]">Total distance</p><p className="mt-1 text-xl font-black tabular-nums">{km(expedition.totalDistanceMeters)}</p></article><article className="rounded-2xl border border-[#dfe5e1] bg-white p-4"><Flag size={18} className="text-[#d94d1c]" /><p className="mt-3 text-xs text-[#718078]">Current position</p><p className="mt-1 text-sm font-black">{reached.name}</p></article><article className="rounded-2xl border border-[#dfe5e1] bg-white p-4"><ArrowRight size={18} className="text-[#d94d1c]" /><p className="mt-3 text-xs text-[#718078]">Next checkpoint</p><p className="mt-1 text-sm font-black">{next ? `${next.name} · ${km(next.distanceMeters - completedMeters)} away` : "Journey complete"}</p></article></section>
+
+      <div className="mt-5"><ExpeditionRouteMap expedition={expedition} completedMeters={completedMeters} /></div>
+
+      <div className="mt-5 grid gap-5 xl:grid-cols-[1.25fr_.75fr]">
+        <section className="rounded-3xl border border-[#dfe5e1] bg-white p-5 sm:p-7" aria-labelledby="checkpoint-timeline"><p className="text-xs font-black uppercase tracking-[.16em] text-[#d94d1c]">Ordered text route</p><h2 id="checkpoint-timeline" className="mt-2 text-2xl font-black">Checkpoint timeline</h2><ol className="mt-6 space-y-0">{expedition.checkpoints.map((checkpoint, index) => { const unlocked = checkpoint.distanceMeters <= completedMeters; return <li key={checkpoint.id} className="grid grid-cols-[2rem_1fr] gap-3"><div className="flex flex-col items-center"><span className={`grid size-8 place-items-center rounded-full border-2 ${unlocked ? "border-[#16725e] bg-[#e5f3ee] text-[#16725e]" : "border-[#ccd6d1] bg-white text-[#82908a]"}`}>{unlocked ? <Check size={15} /> : index + 1}</span>{index < expedition.checkpoints.length - 1 && <span className="min-h-14 w-px flex-1 bg-[#dfe5e1]" />}</div><div className="pb-6"><div className="flex flex-wrap items-baseline justify-between gap-2"><h3 className="font-black">{checkpoint.name}</h3><span className="text-xs font-bold tabular-nums text-[#718078]">{km(checkpoint.distanceMeters)}</span></div><p className="mt-1 text-xs font-bold text-[#16725e]">{checkpoint.country} · {checkpoint.type}</p><p className="mt-2 text-sm leading-6 text-[#62706b]">{checkpoint.story}</p>{checkpoint.reward && <p className="mt-2 text-xs font-black text-[#a45c22]">Reward: {checkpoint.reward}</p>}</div></li>; })}</ol></section>
+        <aside className="space-y-5">
+          <section className="rounded-3xl border border-[#dfe5e1] bg-white p-5 sm:p-6"><p className="text-xs font-black uppercase tracking-[.16em] text-[#d94d1c]">Recent contributions</p><h2 className="mt-2 text-xl font-black">Workouts moving the route</h2>{recentContributions.length > 0 ? <div className="mt-5 space-y-3">{recentContributions.map((item) => <article key={item.id} className="rounded-2xl bg-[#f5f7f4] p-4"><div className="flex justify-between gap-3"><div><p className="text-sm font-black">{item.title}</p><p className="mt-1 text-xs text-[#718078]">{item.occurredOn} · {item.source}</p></div><p className="text-sm font-black tabular-nums text-[#16725e]">+{km(item.distanceMeters)}</p></div><p className="mt-2 text-[10px] text-[#8a9691]">Contribution references workout {item.workoutId}; the original workout is unchanged.</p></article>)}</div> : <p className="mt-4 text-sm leading-6 text-[#718078]">Start this Expedition to send future eligible workout distance here. Earlier workouts are not applied retroactively.</p>}</section>
+          <section className="rounded-3xl bg-[#0d2b24] p-6 text-white"><UsersRound size={20} className="text-[#9fc3b7]" /><p className="mt-4 text-xs font-black uppercase tracking-[.15em] text-[#9fc3b7]">Worldwide passage</p><p className="mt-2 text-3xl font-black tabular-nums">{expedition.community.participants.toLocaleString()}</p><p className="text-sm text-white/65">athletes in {expedition.community.crews.toLocaleString()} crews</p><p className="mt-4 text-xs text-white/55">{km(expedition.community.contributedMeters)} contributed together</p></section>
+          <section className="rounded-3xl border border-[#e8d6b4] bg-[#fffaf0] p-6"><Award size={22} className="text-[#b87520]" /><p className="mt-4 text-xs font-black uppercase tracking-[.15em] text-[#a6681e]">Certificate preview</p><h2 className="mt-2 text-xl font-black">{expedition.certificateTitle}</h2><p className="mt-3 text-sm leading-6 text-[#6f604d]">Awarded after {km(expedition.totalDistanceMeters)} of eligible contributions. Includes the {expedition.completionReward} and a Passport completion claim.</p></section>
+        </aside>
+      </div>
+    </div>
+  );
+}

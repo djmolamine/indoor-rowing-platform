@@ -44,6 +44,7 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 | PD-011 | Learn from Concept2 depth but copy neither design nor architecture | Accepted | 2026-07-21 |
 | PD-012 | Sequence trusted record before public cross-machine competition | Accepted | 2026-07-21 |
 | PD-013 | Use structured geography and a curated club directory | Accepted | 2026-07-22 |
+| PD-014 | Launch eight curated Expeditions through one reusable journey system | Accepted | 2026-07-22 |
 
 ## PD-001: Universal machine-independent platform
 
@@ -153,6 +154,20 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Evidence:** Athlete Passport identity requirements, optional-club principle, federation-role governance, and MVP progressive-profile rules.
 - **Review trigger:** Introduction of Supabase club records, federation imports, partner data, or administrator verification workflows.
 - **Related:** [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md), [06_DATABASE.md](06_DATABASE.md), [15_WORLD_ROWING.md](15_WORLD_ROWING.md)
+
+## PD-014: Curated cinematic Expedition launch
+
+- **Status:** Accepted
+- **Date:** 2026-07-22
+- **Owner:** Founders
+- **Context:** Expeditions need enough route and narrative depth to become a signature product without creating an ungovernable worldwide catalogue or eight disconnected page implementations.
+- **Decision:** Launch The Nile, The Danube, The Rhine, The Thames, The Mississippi, The Amazon, The Mekong, and The Murray as structured checkpoint journeys rendered by one reusable cinematic route system. The MVP permits one active individual Expedition; switching is explicit, preserves prior progress, and routes only future eligible canonical workouts to the new journey.
+- **Rationale:** A focused collection establishes geographic range, distinct completion commitments, editorial quality, and a scalable data contract while keeping athlete progress understandable.
+- **Consequences:** Every journey must pass catalogue validation and content review. Maps remain stylized and non-navigational, text routes remain complete, workout records remain authoritative, and adding a journey requires data and editorial review rather than a new page implementation.
+- **Alternatives:** A single progress bar; twenty shallow launch routes; separate bespoke pages; concurrent automatic contribution to multiple individual Expeditions.
+- **Evidence:** [19_EXPEDITIONS.md](19_EXPEDITIONS.md), canonical workout requirements, accessibility standards, and the one-active-journey MVP constraint.
+- **Review trigger:** Evidence that athletes understand concurrent contribution routing, or introduction of licensed map geometry and an administrative publishing workflow.
+- **Related:** [19_EXPEDITIONS.md](19_EXPEDITIONS.md), [06_DATABASE.md](06_DATABASE.md), [10_COMMUNITY.md](10_COMMUNITY.md), [17_MVP_BUILD_PLAN.md](17_MVP_BUILD_PLAN.md)
 
 ## Decision template
 

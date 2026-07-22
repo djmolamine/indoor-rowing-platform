@@ -135,7 +135,7 @@ export default function LobbyPage() {
                 <div><p className="text-[#789d91]">Countries</p><p className="mt-1 font-black">{expedition.countriesCrossed}</p></div>
               </div>
             </div>
-            <Link href="/challenges" className="mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-white px-4 text-sm font-black text-[#0d2b24] hover:bg-[#edf5f2] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            <Link href="/expeditions/danube" className="mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-white px-4 text-sm font-black text-[#0d2b24] hover:bg-[#edf5f2] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
               Open the Expedition <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>

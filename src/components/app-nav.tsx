@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Home, IdCard, Medal, Settings, Target, UsersRound } from "lucide-react";
+import { CalendarDays, Home, IdCard, Medal, Route, Settings, Target, UsersRound } from "lucide-react";
 
 const items = [
   { label: "Lobby", href: "/dashboard", icon: Home },
@@ -10,6 +10,7 @@ const items = [
   { label: "Passport", href: "/profile", icon: IdCard },
   { label: "Rankings", href: "/leaderboard", icon: Medal },
   { label: "Community", href: "/dashboard#community", icon: UsersRound },
+  { label: "Expeditions", href: "/expeditions", icon: Route },
   { label: "Events", href: "/dashboard#event", icon: CalendarDays },
   { label: "Settings", href: "/profile#settings", icon: Settings },
 ];
