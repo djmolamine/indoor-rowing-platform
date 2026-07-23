@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   CalendarClock,
-  CheckCircle2,
   ChevronRight,
   CircleGauge,
   Clock3,
@@ -58,6 +57,7 @@ export default async function LobbyPage() {
   const country=getCountry(profile.country_code??"");const displayName=profile.display_name??"Athlete";
   const lifetimeDistanceKm=workouts.reduce((total,workout)=>total+Number(workout.distance_meters??0),0)/1000;
   const athlete={...lobbyData.athlete,firstName:displayName.split(" ")[0],fullName:displayName,countryCode:profile.country_code??"—",country:country?.name??"Country not set",trainingIdentity:profile.training_context?.replaceAll("_"," ")??"Independent athlete",passport:{...lobbyData.athlete.passport,status:passport.verification_status,completion:profile.onboarding_status==="completed"?70:30,readiness:profile.onboarding_status==="completed"?"Core profile ready":"Continue onboarding when useful",lifetimeDistanceKm,personalBestCount:0,completedExpeditions:0}};
+  const identityVerified=athlete.passport.status.toLowerCase()!=="unverified";
   const { today, expedition, event, progress: referenceProgress, community } = lobbyData;
   const latest=workouts[0];
   const progress={...referenceProgress,personalBest:{distance:"No eligible result",result:"—",improvement:"Log a verified effort",date:"—",verified:false},recentWorkout:latest?{title:latest.title??"Indoor row",distance:`${(Number(latest.distance_meters??0)/1000).toFixed(2)} km`,duration:latest.duration_ms?`${Math.round(latest.duration_ms/60000)} min`:"—",pace:latest.average_pace_ms_per_500m?`${(latest.average_pace_ms_per_500m/1000).toFixed(1)} sec /500 m`:"Pace not recorded",strokeRate:latest.average_spm?`${latest.average_spm} spm`:"Stroke rate not recorded",source:latest.source_method}:{title:"No workouts yet",distance:"—",duration:"—",pace:"Log your first row",strokeRate:"—",source:""},ranking:{position:0,fieldSize:0,category:"Not ranked",scope:"No eligible result",machineClass:"Verification required"},weeklyConsistency:{completedDays:0,targetDays:3,label:"Start your first week",strokeProfile:[0,0,0,0,0,0,0]},insight:"Your persisted workouts will shape this summary as your record grows."};
@@ -169,7 +169,8 @@ export default async function LobbyPage() {
         <LobbyCard className="relative overflow-hidden">
           <div className="absolute right-0 top-0 h-full w-2 bg-[#0d2b24]" aria-hidden="true" />
           <div className="flex items-start justify-between gap-4"><div><SectionLabel>Athlete Passport</SectionLabel><h2 className="mt-3 text-2xl font-black">{athlete.fullName}</h2><p className="mt-1 text-sm text-[#687871]">{athlete.countryCode} · {athlete.country} · {athlete.trainingIdentity}</p></div><div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#eef3f0] text-[#0d2b24]"><IdCard size={23} aria-hidden="true" /></div></div>
-          <div className="mt-5 flex items-center gap-2 text-sm font-black text-[#16725e]"><CheckCircle2 size={17} aria-hidden="true" /> {athlete.passport.status} athlete identity</div>
+          <div className={`mt-5 flex items-center gap-2 text-sm font-black ${identityVerified?"text-[#16725e]":"text-[#687871]"}`}><ShieldCheck size={17} aria-hidden="true" /> {athlete.passport.status} athlete identity</div>
+          {!identityVerified&&<Link href="/passport#verification" className="mt-2 inline-flex min-h-10 items-center text-sm font-black text-[#d94d1c]">Verify identity <ArrowRight size={15} className="ml-1" aria-hidden="true"/></Link>}
           <p className="mt-2 text-xs text-[#687871]">{athlete.passport.readiness}</p>
           <dl className="mt-6 grid grid-cols-3 gap-3 border-y border-[#e7ebe8] py-5 text-center">
             <div><dt className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#687871]">Lifetime</dt><dd className="mt-2 text-lg font-black tabular-nums">{athlete.passport.lifetimeDistanceKm.toLocaleString()} km</dd></div>
@@ -177,7 +178,7 @@ export default async function LobbyPage() {
             <div><dt className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#687871]">Expeditions</dt><dd className="mt-2 text-lg font-black">{athlete.passport.completedExpeditions}</dd></div>
           </dl>
           <div className="mt-5"><div className="mb-2 flex items-center justify-between text-xs font-bold"><span>Profile readiness</span><span>{athlete.passport.completion}%</span></div><ProgressBar value={athlete.passport.completion} label={`Athlete Passport is ${athlete.passport.completion} percent complete`} /></div>
-          <Link href="/profile" className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-black text-[#d94d1c]">View Athlete Passport <ArrowRight size={16} aria-hidden="true" /></Link>
+          <Link href="/passport" className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-black text-[#d94d1c]">View Athlete Passport <ArrowRight size={16} aria-hidden="true" /></Link>
         </LobbyCard>
       </div>
 

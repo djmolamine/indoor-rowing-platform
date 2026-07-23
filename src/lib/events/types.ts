@@ -57,6 +57,7 @@ export interface Race {
   ageCategoryIds: string[];
   weightCategoryIds: WeightCategoryId[];
   adaptiveClassificationIds: string[];
+  credentialRequirementIds?: string[];
   machineProviderIds: MachineProviderId[];
   machineClassIds: Exclude<MachineClassId, "all-comparable">[];
   verificationRequirement: Exclude<VerificationId, "all-accepted">;
@@ -166,7 +167,7 @@ export interface Registration {
   divisionId: CompetitionDivisionId;
   ageCategoryId: string;
   weightCategoryId: WeightCategoryId;
-  adaptiveClassificationId?: string;
+  credentialSubmissionIds?: string[];
   affiliation: "independent" | "club";
   registrationStatus: "draft" | "pending_payment" | "confirmed" | "cancelled";
   paymentStatus: PaymentStatus;
@@ -174,7 +175,7 @@ export interface Registration {
   createdAt: string;
 }
 
-export interface RegistrationEntry { id:string; registrationId:string; raceId:string; athleteId:string; divisionId:CompetitionDivisionId; ageCategoryId:string; weightCategoryId:WeightCategoryId; adaptiveClassificationId?:string; eligibilityStatus:"pending"|"eligible"|"ineligible"|"withdrawn" }
+export interface RegistrationEntry { id:string; registrationId:string; raceId:string; athleteId:string; divisionId:CompetitionDivisionId; ageCategoryId:string; weightCategoryId:WeightCategoryId; credentialSubmissionIds?:string[]; eligibilityStatus:"pending"|"eligible"|"ineligible"|"withdrawn"|"more_information_required" }
 
 export interface PaymentRecord {
   id: string;

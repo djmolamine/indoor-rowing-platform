@@ -157,6 +157,14 @@ Geographic ranking scope is `World`, `Continent`, `Country`, or `Club`. Country-
 
 ## Competitions and events
 
+### Competition credential system
+
+Identity and Event eligibility are separate domains. The flexible credential ledger comprises `credential_types`, `credential_requirements`, `event_credential_requirements`, `athlete_credentials`, `credential_documents`, `credential_verifications`, `registration_credential_submissions`, `registration_eligibility_decisions`, and the append-only `credential_audit_log`.
+
+Credential types are extensible rather than hardcoded as profile columns. Event requirements determine whether a federation licence, adaptive classification, medical clearance, accreditation, safety certificate, or future governing-body credential is needed. Athlete submissions are scoped to a registration; only an authorized organizer, federation administrator, or Rowform administrator may create a verification decision or verified credential. Athletes can read their own credentials and submit their own evidence, but Row Level Security prevents them from self-verifying.
+
+Documents are private objects referenced by protected metadata. Public Passport projections may expose only the minimum verified endorsement fields approved for presentation; they never expose raw documents, medical details, disability information, or review notes.
+
 Core entities:
 
 - `Organization` and verified roles

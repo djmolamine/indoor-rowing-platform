@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Home, IdCard, Medal, Route, Settings, Target, UsersRound } from "lucide-react";
+import { CalendarDays, Home, IdCard, Medal, Route, Settings, Target } from "lucide-react";
 
 const items = [
   { label: "Lobby", href: "/dashboard", icon: Home },
   { label: "Workouts", href: "/workouts", icon: Target },
-  { label: "Passport", href: "/profile", icon: IdCard },
-  { label: "Rankings", href: "/leaderboard", icon: Medal },
-  { label: "Community", href: "/dashboard#community", icon: UsersRound },
+  { label: "Passport", href: "/passport", icon: IdCard },
+  { label: "Rankings", href: "/rankings", icon: Medal },
   { label: "Expeditions", href: "/expeditions", icon: Route },
   { label: "Events", href: "/events", icon: CalendarDays },
   { label: "Settings", href: "/settings", icon: Settings },

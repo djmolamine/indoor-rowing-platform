@@ -81,6 +81,14 @@ Each claim identifies issuer, evidence type, verification tier, issue date, expi
 
 Personal bests, competition history, ranking milestones, and linked timeline entries open the applicable result detail. A competitive claim references its underlying canonical workout where available, while the Athlete Passport controls whether a public-safe presentation can expose the athlete name, core metrics, machine attribution, verification, Event, and ranking position. Private notes, contact details, precise routine locations, device identifiers, and protected evidence are never included in shared result projections.
 
+### Identity is not competition eligibility
+
+The Athlete Passport proves who the athlete is; it does not allow athletes to grant themselves official competition eligibility. Adaptive classification, disability category, federation or competition licences, medical clearance, and similar official credentials are never editable Passport profile fields.
+
+An Event may request a credential during registration when its published rules require one. The athlete submits only the information and evidence required for that Event, with a clear purpose and visibility statement. An authorized organizer or governing body then approves, rejects, or requests more information. Every decision is audited.
+
+After approval, a read-only **Competition Credentials** section may present the verified credential. Each endorsement shows its status, issuing organization, serial reference where appropriate, verification date, expiry, verifier, and relevant Event history. Raw documents and sensitive eligibility evidence remain protected. Athletes may submit evidence and dispute errors, but cannot directly edit a verified endorsement.
+
 ## Visibility model
 
 Default: private.

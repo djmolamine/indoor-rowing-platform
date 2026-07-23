@@ -288,6 +288,20 @@ Each record includes date, status, owner, context, decision, rationale, conseque
 - **Review trigger:** Production persistence, first live provider telemetry import, organizer correction tooling, or public result sharing.
 - **Related:** [06_DATABASE.md](06_DATABASE.md), [07_MACHINE_PROVIDERS.md](07_MACHINE_PROVIDERS.md), [08_COMPETITIONS.md](08_COMPETITIONS.md), [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md), [19_EVENTS_ARCHITECTURE.md](19_EVENTS_ARCHITECTURE.md)
 
+## PD-024: Separate permanent identity from organizer-managed competition eligibility
+
+- **Status:** Accepted
+- **Date:** 2026-07-23
+- **Owner:** Founders
+- **Context:** Adaptive classifications, licences, medical clearances, and other official authorizations cannot be trustworthy when stored as athlete-editable identity fields.
+- **Decision:** The Athlete Passport remains the permanent identity credential. Event organizers configure competition-specific requirements, athletes submit purpose-limited evidence during registration, and authorized organizers or governing bodies make audited eligibility decisions. Only verified credentials appear in a read-only Competition Credentials section.
+- **Rationale:** This preserves athlete ownership while giving organizers a fast, secure, reusable alternative to collecting sensitive documents by email.
+- **Consequences:** Credential types must be extensible; normal athletes must not see irrelevant sensitive fields; RLS must prevent self-verification; documents remain private; issuer, status, verification, expiry, and Event history remain visible where appropriate.
+- **Alternatives:** Athlete self-declaration on the Passport; hardcoded adaptive profile fields; organizer email workflows; a provider- or federation-specific schema.
+- **Evidence:** Athlete Passport and Event architecture review.
+- **Review trigger:** First live organizer review, federation-issued credential, or external credential standard integration.
+- **Related:** [09_ATHLETE_PASSPORT.md](09_ATHLETE_PASSPORT.md), [19_EVENTS_ARCHITECTURE.md](19_EVENTS_ARCHITECTURE.md), [06_DATABASE.md](06_DATABASE.md), [15_WORLD_ROWING.md](15_WORLD_ROWING.md)
+
 ## Decision template
 
 Copy this structure for new records:

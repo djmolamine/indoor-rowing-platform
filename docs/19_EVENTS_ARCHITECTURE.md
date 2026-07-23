@@ -273,6 +273,14 @@ States are not free-form labels. Transitions require authorized roles, timestamp
 
 ## Verification
 
+### Organizer-managed eligibility
+
+The Passport supplies identity claims, not self-declared official eligibility. Each Event configures credential requirements by Event or race, including whether the requirement is mandatory, accepted issuers, supported classifications, document needs, expiry rules, and organizer approval.
+
+Registration renders credential fields dynamically. Athletes who enter ordinary races never see adaptive, medical, or other irrelevant sensitive fields. When a requirement applies, the athlete may submit issuing authority, credential or classification number, relevant dates, supporting documents, and notes. Nothing is mandatory unless the organizer's published configuration makes it so.
+
+Authorized reviewers use a dedicated queue to approve, reject, request more information, mark evidence verified, and issue an eligibility decision. Check-in presents identity, photo, Passport number, verification status, required and approved credentials, missing items, and the current eligibility decision. All changes are append-only audited actions. Verified credentials may then appear as read-only official endorsements on the Athlete Passport.
+
 Event verification applies the tiered model in [08_COMPETITIONS.md](08_COMPETITIONS.md) to named claims and evidence. An Event can require one or combine several of these sources:
 
 - **Organizer upload:** a structured result file or signed record submitted by an authorized organizer, validated before import.
