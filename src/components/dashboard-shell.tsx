@@ -15,9 +15,10 @@ export async function DashboardShell({ children }: { children: React.ReactNode }
         <div className="px-2"><Brand /></div>
         <div className="mt-10"><AppNav /></div>
         <div className="mt-auto rounded-2xl bg-[#0d2b24] p-4 text-white">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8eb4a8]">Danube expedition</p>
-          <p className="mt-2 text-2xl font-black">428.6 km</p>
-          <p className="mt-1 text-xs text-[#a9c1ba]">Next milestone: Vienna</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#8eb4a8]">Current journey</p>
+          <p className="mt-2 text-lg font-black">The Danube</p>
+          <div className="mt-3 grid grid-cols-2 gap-3 text-xs"><div><p className="text-[#8eb4a8]">Location</p><p className="mt-1 font-black">Ulm</p></div><div><p className="text-[#8eb4a8]">Next</p><p className="mt-1 font-black">Passau</p></div><div><p className="text-[#8eb4a8]">Today</p><p className="mt-1 font-black">12.4 km</p></div><div><p className="text-[#8eb4a8]">Remaining</p><p className="mt-1 font-black">2,421 km</p></div></div>
+          <Link href="/expeditions/danube" className="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-full bg-white px-3 text-xs font-black text-[#0d2b24]">Quick resume</Link>
         </div>
       </aside>
 
